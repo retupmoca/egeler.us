@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Egeler Blog!</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+    <style type="text/css">
+        body {
+            background-color: #dddddd;
+            padding:0;
+            margin:0;
+            height: 100%;
+        }
+        .page {
+            width: 75%;
+            margin-left: 12.5%;
+            background-color: #efefef;
+            font-family: Helvetica;
+            box-shadow: 2px 2px 8px #666666;
+            min-height: 100vh;
+            position: relative;
+        }
+        .header {
+            height: 100px;
+            text-align: center;
+            line-height: 100px;
+            background-color: #8F98D3;
+            font-size: 30px;
+        }
+        .account-links {
+            line-height: 25px;
+            font-size: 15px;
+            float: right;
+            padding-right: 5px;
+        }
+        .content {
+            padding-bottom: 55px;
+        }
+        .page-links {
+            width: 90%;
+            margin-left: 5%;
+            margin-top: 25px;
+            background-color: #dddddd;
+            border-radius: 7px;
+            padding: 7px;
+            text-align: center;
+        }
+        .post {
+            width: 90%;
+            margin-left: 5%;
+            margin-top: 25px;
+            background-color: #dddddd;
+            border-radius: 7px;
+            padding: 7px;
+        }
+        .post-title {
+            font-size: 21px;
+            display: inline-block;
+        }
+        .post-author {
+            display: inline-block;
+            font-size: smaller;
+        }
+        .post-stamp {
+            display: inline-block;
+            font-size: smaller;
+        }
+        .post-tags {
+            display: inline-block;
+            font-size: smaller;
+        }
+        .manage-tags {
+            float: right;
+        }
+        .post-body {
+            margin-top: 7px;
+        }
+        .footer {
+            width: 100%;
+            text-align: center;
+            background-color: #dddddd;
+            color: #606060;
+            font-size: smaller;
+            position: absolute;
+            bottom: 0;
+            height: 30px;
+            line-height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            Ramblings of the Egeler Family
+            <div class="account-links">
+                <TMPL_IF NAME="login">
+                    <a href="/blog/add-post">Add Post</a> |
+                    <TMPL_VAR NAME="login">
+                <TMPL_ELSE>
+                    <a href="/login?return=/blog">Login</a>
+                </TMPL_IF>
+            </div>
+        </div>
+        <div class="content">

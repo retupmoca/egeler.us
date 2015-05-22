@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><TMPL_IF NAME="edit">Edit<TMPL_ELSE>Add</TMPL_IF> post</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+    <div class="header"><TMPL_IF NAME="edit">Edit<TMPL_ELSE>Add</TMPL_IF> blog post</div>
+    <div class="content">
+        <form method="post">
+            <input type="hidden" name="id" value="<TMPL_VAR NAME="id">">
+            <div class="form-field">
+                <span class="label">Title:</span>
+                <span class="data"><input type="text" name="title" value="<TMPL_VAR NAME="title">"></span>
+            </div>
+            <div class="form-field">
+                <span class="label">Tags:</span>
+                <span class="data"><input type="text" name="tags" value="<TMPL_VAR NAME="tags">"></span>
+            </div>
+            <div class="form-field">
+                <span class="label">Body:</span>
+                <span class="data"><textarea name="body"><TMPL_VAR NAME="body"></textarea></span>
+            </div>
+            <input type="submit">
+        </form>
+    </div>
+</body>
+</html>

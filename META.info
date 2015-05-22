@@ -1,0 +1,17 @@
+{
+    "name" : "Site",
+    "version" : "0.0.1",
+    "author" : "github:retupmoca",
+    "description" : "egeler.us website code",
+    "depends" : [ "DBIish",
+                  "SCGI",
+                  "HTTP::ParseParams",
+                  "HTML::Template",
+                  "MIME::Base64",
+                  "XML",
+                  "URI::Encode",
+                  "Auth::SAML2",
+                  "Auth::PAM::Simple" ],
+    "provides" : {},
+    "source-url" : "https://github.com/retupmoca/egeler.us"
+}

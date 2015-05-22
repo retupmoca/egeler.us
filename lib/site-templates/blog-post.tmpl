@@ -1,0 +1,14 @@
+<TMPL_INCLUDE NAME="blog-head.include">
+            <div class="post">
+                <div class="post-title"><TMPL_VAR NAME="title"></div>
+                <div class="post-author">By <TMPL_VAR NAME="author"></div>
+                <div class="post-stamp">On <TMPL_VAR NAME="posted"></div>
+                <TMPL_IF NAME="tags"><div class="post-tags">Tagged
+                                     <TMPL_VAR NAME="tags"></div></TMPL_IF>
+                <TMPL_IF NAME="own-post"><div class="manage-tags">
+                    <a href="/blog/p/<TMPL_VAR NAME="id">/edit" rel="nofollow">edit</a>
+                    <a onclick="if(!config('are you sure?')){ return 0; }" href="/blog/p/<TMPL_VAR NAME="id">/delete" rel="nofollow">delete</a>
+                </div></TMPL_IF>
+                <div class="post-body"><TMPL_VAR NAME="body"></div>
+            </div>
+<TMPL_INCLUDE NAME="blog-foot.include">
