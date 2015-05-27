@@ -39,7 +39,7 @@ method data {
         my @posts = $sth.fetchall-AoH;
         $sth.finish;
         for @posts -> $p is rw {
-            my $md = Text::Markdown.new($p<body>);
+            my $md = Text::Markdown::Document.new($p<body>);
             $p<body> = $md.render;
             if $.session.data<local-login> && $p<author> eq $.session.data<local-login> {
                 $p<own-post> = 1;
