@@ -1,6 +1,6 @@
 use HTMLPage;
 use SiteDB;
-use File::Temp;
+use Text::Markdown;
 
 class Section::Blog::Home does HTMLPage;
 
@@ -39,13 +39,8 @@ method data {
         my @posts = $sth.fetchall-AoH;
         $sth.finish;
         for @posts -> $p is rw {
-            my ($inf, $infh) = tempfile(:!unlink);
-            $infh.spurt: $p<body>;
-            my ($of, $ofh) = tempfile(:!unlink);
-            shell('markdown_py <'~$inf~' >'~$of);
-            $p<body> = $of.IO.slurp;
-            unlink($of);
-            unlink($inf);
+            my $md = Text::Markdown.new($p<body>);
+            $p<body> = $md.render;
             if $.session.data<local-login> && $p<author> eq $.session.data<local-login> {
                 $p<own-post> = 1;
             }
