@@ -1,6 +1,7 @@
 use HTMLPage;
 use SiteDB;
 use Text::Markdown;
+use Text::Markdown::to::HTML;
 
 class Section::Blog::Home does HTMLPage;
 
@@ -40,7 +41,7 @@ method data {
         $sth.finish;
         for @posts -> $p is rw {
             my $md = Text::Markdown::Document.new($p<body>);
-            $p<body> = $md.render;
+            $p<body> = $md.render(Text::Markdown::to::HTML);
             if $.session.data<local-login> && $p<author> eq $.session.data<local-login> {
                 $p<own-post> = 1;
             }
