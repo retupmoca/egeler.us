@@ -8,6 +8,7 @@
                   "File::Temp",
                   "HTTP::ParseParams",
                   "Web",
+                  "HTTP::Easy",
                   "HTML::Template",
                   "MIME::Base64",
                   "XML",
