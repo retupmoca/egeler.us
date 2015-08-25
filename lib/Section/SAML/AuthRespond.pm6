@@ -8,7 +8,7 @@ has $!status = 200;
 has @!headers;
 
 method html-data {
-    my %sp-info = Config.get('saml-remote-sp');
+    my $sp-info = Config.get('saml-remote-sp');
     my $x509-pem = Config.get('saml-local-idp')<cert>;
     my $private-pem = Config.get('saml-local-idp')<key>;
 
@@ -22,7 +22,7 @@ method html-data {
 
     die "No current auth request" unless $authn;
 
-    die "Unknown remote: " ~ $authn.issuer unless %sp-info{$authn.issuer};
+    die "Unknown remote: " ~ $authn.issuer unless $sp-info{$authn.issuer};
 
     my %attributes;
     %attributes<email> = [ $.session.data<local-login> ~ '@egeler.us' ];
@@ -49,7 +49,7 @@ method html-data {
     my $response-b64 = MIME::Base64.encode-str(~$response);
     $response-b64 ~~ s:g/\s+//;
 
-    return '<form method="POST" action="' ~ %sp-info{$authn.issuer}<endpoint> ~ '">'
+    return '<form method="POST" action="' ~ $sp-info{$authn.issuer}<endpoint> ~ '">'
      ~ '<input type="hidden" name="SAMLResponse" value="' ~ $response-b64 ~ '"></form>'
      ~ '<script language="javascript">document.forms[0].submit();</script>';
 }

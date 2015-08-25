@@ -70,13 +70,13 @@ sub db-update($dbh, $dbname) {
     }
 }
 
-my %config;
+my $config;
 my %revchecked;
 sub db-connect($dbname) {
-    unless %config {
-        %config = Config.get('database');
+    unless $config {
+        $config = Config.get('database');
     }
-    my $item = %config{$dbname};
+    my $item = $config{$dbname};
 
     die "Unable to find configuration for database $dbname" unless $item;
 
