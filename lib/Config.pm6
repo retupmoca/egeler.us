@@ -2,12 +2,12 @@ class Config;
 
 use JSON::Tiny;
 
-my %data;
+my $data;
 
 method load($path) {
-    %data = from-json($path.IO.slurp);
+    $data = from-json($path.IO.slurp);
 }
 
 method get($key) {
-    %data{$key};
+    $data{$key};
 }
