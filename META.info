@@ -11,7 +11,8 @@
                   "XML",
                   "URI::Encode",
                   "Auth::SAML2",
-                  "Auth::PAM::Simple" ],
+                  "Auth::PAM::Simple",
+                  "Text::Markdown" ],
     "provides" : {},
     "source-url" : "https://github.com/retupmoca/egeler.us"
 }
