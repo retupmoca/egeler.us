@@ -5,6 +5,7 @@
     "description" : "egeler.us website code",
     "depends" : [ "DBIish",
                   "SCGI",
+                  "File::Temp",
                   "HTTP::ParseParams",
                   "Web",
                   "HTML::Template",
