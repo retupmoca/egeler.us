@@ -6,6 +6,7 @@
     "depends" : [ "DBIish",
                   "SCGI",
                   "HTTP::ParseParams",
+                  "Web",
                   "HTML::Template",
                   "MIME::Base64",
                   "XML",
