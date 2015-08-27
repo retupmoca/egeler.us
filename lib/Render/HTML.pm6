@@ -1,4 +1,4 @@
-class Render::HTML;
+unit class Render::HTML;
 
 use HTML::Template;
 

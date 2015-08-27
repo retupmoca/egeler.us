@@ -2,7 +2,7 @@ use HTMLPage;
 use Auth::SAML2::EntityDescriptor;
 use Config;
 
-class Section::SAML::Meta does HTMLPage;
+unit class Section::SAML::Meta does HTMLPage;
 
 method html-data { 
     my $x509-pem = Config.get('saml-local-idp')<cert>;

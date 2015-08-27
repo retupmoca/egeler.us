@@ -1,6 +1,6 @@
 use HTMLPage;
 
-class Page::Redirect does HTMLPage;
+unit class Page::Redirect does HTMLPage;
 
 has $.code;
 has $.url;

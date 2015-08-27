@@ -1,4 +1,4 @@
-class Site;
+unit class Site;
 
 use Web::Request;
 use Render::HTML;

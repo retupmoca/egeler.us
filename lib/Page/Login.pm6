@@ -3,7 +3,7 @@ use Page::Redirect;
 
 use Auth::PAM::Simple;
 
-class Page::Login does HTMLPage;
+unit class Page::Login does HTMLPage;
 
 method new(:$request, :$session) {
     if $request.method eq 'POST' {

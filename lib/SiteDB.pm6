@@ -1,4 +1,4 @@
-class SiteDB;
+unit class SiteDB;
 use Config;
 use DBIish;
 use JSON::Tiny;

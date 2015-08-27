@@ -2,7 +2,7 @@ use HTMLPage;
 use Config;
 use Auth::SAML2::Assertion;
 
-class Section::SAML::AuthRespond does HTMLPage;
+unit class Section::SAML::AuthRespond does HTMLPage;
 
 has $!status = 200;
 has @!headers;

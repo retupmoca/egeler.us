@@ -1,4 +1,4 @@
-class Config;
+unit class Config;
 
 use JSON::Tiny;
 

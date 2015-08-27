@@ -2,7 +2,7 @@ use HTMLPage;
 use SiteDB;
 use Page::Redirect;
 
-class Section::Blog::AddPost does HTMLPage;
+unit class Section::Blog::AddPost does HTMLPage;
 
 method html-template { 'add-blog-post.tmpl' }
 

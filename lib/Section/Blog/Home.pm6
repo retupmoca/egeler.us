@@ -3,7 +3,7 @@ use SiteDB;
 use Text::Markdown;
 use Text::Markdown::to::HTML;
 
-class Section::Blog::Home does HTMLPage;
+unit class Section::Blog::Home does HTMLPage;
 
 method html-template {
     $.request.uri ~~ /\/u\/(<-[\/]>+)$/;

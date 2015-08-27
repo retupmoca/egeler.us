@@ -1,4 +1,4 @@
-class Section::SAML;
+unit class Section::SAML;
 
 use Section::SAML::Meta;
 use Section::SAML::Auth;

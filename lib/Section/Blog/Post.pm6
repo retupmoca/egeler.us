@@ -3,7 +3,7 @@ use SiteDB;
 use File::Temp;
 use Page::Redirect;
 
-class Section::Blog::Post does HTMLPage;
+unit class Section::Blog::Post does HTMLPage;
 
 method html-template { 'blog-post.tmpl' }
 

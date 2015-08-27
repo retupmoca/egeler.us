@@ -1,4 +1,4 @@
-class Section::Blog;
+unit class Section::Blog;
 
 use Section::Blog::Home;
 use Section::Blog::AddPost;

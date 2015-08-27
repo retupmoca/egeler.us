@@ -4,7 +4,7 @@ use Auth::SAML2::AuthnRequest;
 use Config;
 use XML;
 
-class Section::SAML::Auth does HTMLPage;
+unit class Section::SAML::Auth does HTMLPage;
 
 method html-status { 302 }
 method html-headers { 

@@ -1,4 +1,4 @@
-role HTMLPage;
+unit role HTMLPage;
 
 has $.request;
 has $.session;
