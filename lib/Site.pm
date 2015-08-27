@@ -16,6 +16,9 @@ has @!dispatch-list;
 has $!sessions;
 
 submethod BUILD() {
+    # redirect retupmoca.com to andrew's blog posts
+    @!dispatch-list.push([-> $r, $s { $r.host eq 'retupmoca.com' },
+                             Page::Redirect.new(:code(301), :url('https://egeler.us/u/andrew')));
     # ensure that we are https and on egeler.us
     @!dispatch-list.push([-> $r, $s { 
                                         if $r.host ne 'egeler.us'
