@@ -32,6 +32,7 @@ method data {
     my %param;
     $.request.uri ~~ /\/u\/(<-[\/]>+)$/;
     my $user = $0;
+    $user ~~ s/\?.+//;
     my @rss-items;
     SiteDB.with-database: 'blog', -> $dbh {
         my $perpage = 25;
