@@ -63,7 +63,7 @@ method data {
                                                             :link('https://egeler.us/blog/p/'~$p<id>),
                                                             :summary($p<body>),
                                                             :author($p<author>),
-                                                            :updated(DateTime.new($p<posted>.subst(/\s/, 'T') ~ 'Z'));
+                                                            :updated(DateTime.new($p<posted>.subst(/\s/, 'T') ~ 'Z')));
             }
         }
         if $.request.params<rss> {
