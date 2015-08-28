@@ -53,11 +53,6 @@ method data {
         my @posts = $sth.fetchall-AoH;
         $sth.finish;
         for @posts -> $p is rw {
-            my $md = Text::Markdown::Document.new($p<body>);
-            $p<body> = $md.render(Text::Markdown::to::HTML);
-            if $.session.data<local-login> && $p<author> eq $.session.data<local-login> {
-                $p<own-post> = 1;
-            }
             if $.request.params<rss> {
                 @rss-items.push: Syndication::RSS::Item.new(:title($p<title>),
                                                             :link('https://egeler.us/blog/p/'~$p<id>),
@@ -65,9 +60,14 @@ method data {
                                                             :author($p<author>),
                                                             :updated(DateTime.new($p<posted>.subst(/\s/, 'T') ~ 'Z')));
             }
+            my $md = Text::Markdown::Document.new($p<body>);
+            $p<body> = $md.render(Text::Markdown::to::HTML);
+            if $.session.data<local-login> && $p<author> eq $.session.data<local-login> {
+                $p<own-post> = 1;
+            }
         }
         if $.request.params<rss> {
-            $!feed = Syndication::RSS.new(:title('Egeler Blog'), :link($.request.uri), :description(''), :items(@rss-items));
+            $!feed = Syndication::RSS.new(:title('Egeler Blog'), :link('https://egeler.us' ~ $.request.uri.subst(/\?.+/, '')), :description(''), :items(@rss-items));
         }
         %param<posts> = @posts;
         %param<login> = $.session.data<local-login>;
