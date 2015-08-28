@@ -15,6 +15,7 @@
                   "URI::Encode",
                   "Auth::SAML2",
                   "Auth::PAM::Simple",
+                  "Syndication",
                   "Text::Markdown" ],
     "provides" : {},
     "source-url" : "https://github.com/retupmoca/egeler.us"
