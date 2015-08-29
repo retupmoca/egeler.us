@@ -1,6 +1,7 @@
 use HTMLPage;
-use SiteDB;
-use File::Temp;
+use Section::Blog::Data::Post;
+use Text::Markdown;
+use Text::Markdown::to::HTML;
 use Page::Redirect;
 
 unit class Section::Blog::Post does HTMLPage;
@@ -10,15 +11,11 @@ method html-template { 'blog-post.tmpl' }
 method new(:$request, :$session) {
     if $request.uri ~~ /\/(\d+)\/delete$/ {
         my $id = $0;
-        SiteDB.with-database: 'blog', -> $dbh {
-            my $p = $dbh.with-query: 'SELECT * FROM posts WHERE id=?', $id,
-                                       *.fetchrow-hash;
+        my $p = Section::Blog::Data::Post.load(:$id);
 
-            die "Not authorized" unless $p<author> eq $session.data<local-login>;
+        die "Not authorized" unless $p.author eq $session.data<local-login>;
 
-            $dbh.do('DELETE FROM posts WHERE id=?', $id);
-        };
-
+        $p.delete;
         return Page::Redirect.new(:code(302), :url('/blog'));
     }
     self.bless(:$request, :$session);
@@ -28,24 +25,20 @@ method data {
     my %d;
     $.request.uri ~~ /\/(\d+)/;
     my $id = $0;
-    my $p = SiteDB.with-database: 'blog', {
-        $_.with-query: 'SELECT * FROM posts WHERE id=?', $id,
-                         *.fetchrow-hash;
-    };
+    my $p = Section::Blog::Data::Post.load(:$id);
+    my %d;
 
-    my ($inf, $infh) = tempfile(:!unlink);
-    $infh.spurt: $p<body>;
-    my ($of, $ofh) = tempfile(:!unlink);
-    shell('markdown_py <'~$inf~' >'~$of);
-    $p<body> = $of.IO.slurp;
-    unlink($of);
-    unlink($inf);
-    if $.session.data<local-login> && $p<author> eq $.session.data<local-login> {
-        $p<own-post> = 1;
+    my $md = Text::Markdown::Document.new($p.body);
+    %d<body> = $md.render(Text::Markdown::to::HTML);
+    if $.session.data<local-login> && $p.author eq $.session.data<local-login> {
+        %d<own-post> = 1;
     }
 
-    for $p.kv -> $k, $v {
-        %d{$k} = $v;
-    }
+    %d<id> = $p.id;
+    %d<title> = $p.title;
+    %d<tags> = $p.tags.join(',');
+    %d<author> = $p.author;
+    %d<posted> = $p.posted.Str.subst(/Z$/, '').subst(/T/, ' ');
+
     return %d;
 }
