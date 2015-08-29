@@ -80,7 +80,7 @@ method save {
                          $.title,
                          $.body,
                          $.id);
-            $dbh.do('DELETE FROM post_tags WHERE id=?', $.id);
+            $dbh.do('DELETE FROM post_tags WHERE post_id=?', $.id);
             for @.tags -> $tag {
                 $dbh.do('INSERT INTO post_tags SET post_id=?,tag=?', $.id, $tag);
             }
