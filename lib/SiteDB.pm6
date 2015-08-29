@@ -61,13 +61,13 @@ sub db-update($dbh, $dbname) {
             $current--;
         }
         run-db-script($dbh, %revs{$current}<f>);
-        $dbh.do("INSERT INTO revnum VALUES(?)", $current);
+        $dbh.do("INSERT INTO dbrev VALUES(?)", $current);
     }
 
     while $current < $latest {
         $current++;
         run-db-script($dbh, %revs{$current}<i>);
-        $dbh.do("INSERT INTO revnum VALUES(?)", $current);
+        $dbh.do("INSERT INTO dbrev VALUES(?)", $current);
     }
 }
 
