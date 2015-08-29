@@ -1,7 +1,5 @@
 use HTMLPage;
 use Section::Blog::Data::Post;
-use Text::Markdown;
-use Text::Markdown::to::HTML;
 use Page::Redirect;
 
 unit class Section::Blog::Post does HTMLPage;
