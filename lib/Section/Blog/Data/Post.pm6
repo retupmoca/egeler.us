@@ -19,7 +19,9 @@ method html-body {
 method load(:$id) {
     SiteDB.with-database: 'blog', -> $dbh {
         my $p = $dbh.with-query: 'SELECT * FROM posts WHERE id=?', $id, *.fetchrow-hash;
-        my @tags = $dbh.with-query: 'SELECT * FROM post_tags WHERE post_id=?', $p<id>, *.fetchall-AoH;
+        $dbh.with-query: 'SELECT * FROM post_tags WHERE post_id=?', $p<id>, -> $sth {
+            while $sth.fetchrow-hash -> $t { @tags.push($t<tag>) }
+        };
         self.bless(:id($p<id>),
                    :title($p<title>),
                    :body($p<body>),
@@ -45,9 +47,15 @@ method search(:$author, :$tag, :$count!, :$offset!) {
 
     my @ret;
     SiteDB.with-database: 'blog', -> $dbh {
-        my @posts = $dbh.with-query: |@query, *.fetchall-AoH;
+        my @posts;
+        $dbh.with-query: |@query, -> $sth {
+            while $sth.fetchrow-hash -> $p { @posts.push($p) }
+        };
         for @posts -> $p {
-            my @tags = $dbh.with-query: 'SELECT * FROM post_tags WHERE post_id=?', $p<id>, *.fetchall-AoH;
+            my @tags;
+            $dbh.with-query: 'SELECT * FROM post_tags WHERE post_id=?', $p<id>, -> $sth {
+                while $sth.fetchrow-hash -> $t { @tags.push($t<tag>) }
+            };
             @ret.push:
                 self.bless(:id($p<id>),
                            :title($p<title>),
