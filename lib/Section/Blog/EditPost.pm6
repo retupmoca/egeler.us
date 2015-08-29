@@ -1,5 +1,5 @@
 use HTMLPage;
-use SiteDB;
+use Section::Blog::Data::Post;
 use Page::Redirect;
 
 unit class Section::Blog::EditPost does HTMLPage;
@@ -10,23 +10,15 @@ method new(:$request, :$session) {
     if $request.method eq 'POST' {
         $request.uri ~~ /\/(\d+)\//;
         my $id = $0;
-        SiteDB.with-database: 'blog', -> $dbh {
+        my $p = Section::Blog::Data::Post.load(:$id);
 
-            my $p = $dbh.with-query: 'SELECT * FROM posts WHERE id=?', $id,
-                                       *.fetchrow-hash;
+        die "Not authorized" unless $p.author eq $session.data<local-login>;
 
-            die "Not authorized" unless $p<author> eq $session.data<local-login>;
+        $p.title = $request.params<title>;
+        $p.body = $request.params<body>;
+        $p.tags = $request.params<tags>.split(/\,/);
 
-            $dbh.do('UPDATE posts SET '
-                                    ~'title=?'
-                                    ~',body=?'
-                                    ~',tags=?'
-                                    ~' WHERE id=?',
-                         $request.params<title>,
-                         $request.params<body>,
-                         $request.params<tags>,
-                         $id);
-        };
+        $p.save;
 
         return Page::Redirect.new(:code(302), :url('/blog'));
     }
@@ -39,20 +31,14 @@ method data {
     %data<edit> = 1;
     $.request.uri ~~ /\/(\d+)\//;
     my $id = $0;
+    my $p = Section::Blog::Data::Post.load(:$id);
 
-    SiteDB.with-database: 'blog', -> $dbh {
-        my $p = $dbh.with-query: 'SELECT * FROM posts WHERE id=?', $id,
-                                   *.fetchrow-hash;
+    %data<id> = $p.id;
+    %data<title> = $p.title;
+    %data<body> = $p.body;
+    %data<tags> = $p.tags.join(',');
 
-        given $p {
-            %data<id> = $_<id>;
-            %data<title> = $_<title>;
-            %data<body> = $_<body>;
-            %data<tags> = $_<tags>;
-        }
-
-        die "Not authorized" unless $p<author> eq $.session.data<local-login>;
-    };
+    die "Not authorized" unless $p.author eq $.session.data<local-login>;
 
     return %data;
 }
