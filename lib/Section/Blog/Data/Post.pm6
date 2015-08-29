@@ -26,7 +26,7 @@ method load(:$id) {
 method search(:$author, :$tag, :$count!, :$offset!) {
     my @query = 'SELECT * FROM posts';
 
-    if $user {
+    if $author {
         @query[0] ~= ' WHERE author=?';
         @query.push: $author;
     }
