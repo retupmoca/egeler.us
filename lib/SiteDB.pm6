@@ -17,6 +17,7 @@ role WithQuery {
 sub run-db-script($dbh, $script) {
     my @script-data = $script.IO.slurp.split(/\;\n/);
     for @script-data {
+        next unless $_ && $_ ~~ /\S/;
         # use with-query to ensure $sth.finish gets called
         $dbh.with-query: $_, -> $sth { };
     }
