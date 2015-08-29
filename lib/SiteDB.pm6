@@ -102,7 +102,7 @@ method with-database($dbname, &block) {
     my $dbh;
     while !$dbh && @freelist {
         my $tmp = @freelist.pop;
-        $dbh = $tmp if $tmp.ping;
+        $dbh = $tmp if $tmp && $tmp.ping;
     }
     $dbh = db-connect($dbname) unless $dbh;
     return block($dbh);
