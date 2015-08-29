@@ -27,12 +27,11 @@ method data {
     my $p = Section::Blog::Data::Post.load(:$id);
     my %d;
 
-    my $md = Text::Markdown::Document.new($p.body);
-    %d<body> = $md.render(Text::Markdown::to::HTML);
     if $.session.data<local-login> && $p.author eq $.session.data<local-login> {
         %d<own-post> = 1;
     }
 
+    %d<body> = $p.html-body;
     %d<id> = $p.id;
     %d<title> = $p.title;
     %d<tags> = $p.tags.join(',');

@@ -1,4 +1,6 @@
 use SiteDB;
+use Text::Markdown;
+use Text::Markdown::to::HTML;
 
 unit class Section::Blog::Data::Post;
 
@@ -8,6 +10,11 @@ has $.body is rw;
 has @.tags is rw;
 has $.author;
 has $.posted;
+
+method html-body {
+    my $md = Text::Markdown::Document.new($.body);
+    $md.render(Text::Markdown::to::HTML);
+}
 
 method load(:$id) {
     SiteDB.with-database: 'blog', -> $dbh {
