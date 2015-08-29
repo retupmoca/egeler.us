@@ -19,6 +19,7 @@ method html-body {
 method load(:$id) {
     SiteDB.with-database: 'blog', -> $dbh {
         my $p = $dbh.with-query: 'SELECT * FROM posts WHERE id=?', $id, *.fetchrow-hash;
+        my @tags;
         $dbh.with-query: 'SELECT * FROM post_tags WHERE post_id=?', $p<id>, -> $sth {
             while $sth.fetchrow-hash -> $t { @tags.push($t<tag>) }
         };
