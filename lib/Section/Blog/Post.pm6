@@ -22,7 +22,6 @@ method new(:$request, :$session) {
 }
 
 method data {
-    my %d;
     $.request.uri ~~ /\/(\d+)/;
     my $id = $0;
     my $p = Section::Blog::Data::Post.load(:$id);
