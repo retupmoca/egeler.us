@@ -60,8 +60,8 @@ method data {
         %d<id> = $p.id;
         %d<title> = $p.title;
         %d<tags> = $p.tags.join(',');
-        %d<tags_list> = $p.tags.map({ { tag => $_, comma => 1 }<> });
-        %d<tags_list>[*-1]<comma> = 0;
+        %d<tags_list> = $p.tags.map({ ( tag => $_, comma => 1 ).hash.item });
+        %d<tags_list>[*-1]<comma> = 0 if $p.tags;
         %d<author> = $p.author;
         %d<posted> = $p.posted.Str.subst(/Z$/, '').subst(/T/, ' ');
 
