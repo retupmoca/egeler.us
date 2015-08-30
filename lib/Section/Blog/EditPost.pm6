@@ -18,7 +18,7 @@ method new(:$request, :$session) {
         $p.body = $request.params<body>;
         my @tags = $request.params<tags>.split(/\,/);
         @tags.map(-> $_ is rw { $_ ~~ s/^\s+//; $_ ~~ s/\s+$//; });
-        @tags.grep({$_});
+        @tags = @tags.grep({$_});
         $p.tags = @tags;
 
         $p.save;
