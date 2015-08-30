@@ -51,7 +51,8 @@ method data {
         }
         my %d;
 
-        if $.session.data<local-login> && $p.author eq $.session.data<local-login> {
+        if $.session.data<local-login>
+           && $p.author eq $.session.data<local-login> {
             %d<own-post> = 1;
         }
 
@@ -59,13 +60,19 @@ method data {
         %d<id> = $p.id;
         %d<title> = $p.title;
         %d<tags> = $p.tags.join(',');
+        %d<tags_list> = $p.tags.map({ { tag => $_ } });
         %d<author> = $p.author;
         %d<posted> = $p.posted.Str.subst(/Z$/, '').subst(/T/, ' ');
 
         @tposts.push($%d);
     }
     if $.request.params<rss> {
-        $!feed = Syndication::RSS.new(:title('Egeler Blog'), :link('https://egeler.us' ~ $.request.uri.subst(/\?.+/, '')), :description(''), :items(@rss-items));
+        my $link = 'https://egeler.us' ~ $.request.uri.subst(/\?.+/, '');
+        if $.request.params<tag> {
+            $link ~= '?tag='~$.request.params<tag>;
+        }
+        $!feed = Syndication::RSS.new(:title('Egeler Blog'), :link($link),
+                                      :description(''), :items(@rss-items));
     }
     %param<posts> = @tposts;
     %param<login> = $.session.data<local-login>;
