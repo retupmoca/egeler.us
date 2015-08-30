@@ -6,7 +6,7 @@
                     <div class="post-stamp">On <TMPL_VAR NAME="posted"></div>
                     <TMPL_IF NAME="tags"><div class="post-tags">Tagged
                                          <TMPL_LOOP NAME="tags_list">
-                                            <a href="?tag=<TMPL_VAR NAME="tag">"><TMPL_VAR NAME="tag"></a><TMPL_UNLESS NAME="__last__">,</TMPL_UNLESS>
+                                            <a href="?tag=<TMPL_VAR NAME="tag">"><TMPL_VAR NAME="tag"></a><TMPL_IF NAME="comma">,</TMPL_IF>
                                          </TMPL_LOOP></div></TMPL_IF>
                     <TMPL_IF NAME="own-post"><div class="manage-tags">
                         <a href="/blog/p/<TMPL_VAR NAME="id">/edit" rel="nofollow">edit</a>
