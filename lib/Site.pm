@@ -41,8 +41,8 @@ submethod BUILD() {
         -> $r, $s {
             $r.uri ~~ /^\/login/;
         }, Page::Login]);
-    @!dispatch-list.push(Section::Blog.dispatch('/blog'));
-    @!dispatch-list.push(Section::SAML.dispatch('/saml2'));
+    @!dispatch-list.append(Section::Blog.dispatch('/blog'));
+    @!dispatch-list.append(Section::SAML.dispatch('/saml2'));
     @!dispatch-list.push([-> $r, $s { True }, Page::NotFound]);
 
     $!sessions = SessionManager.new;

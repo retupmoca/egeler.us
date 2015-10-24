@@ -25,8 +25,8 @@ method output() {
     my $type = $.page.html-type || 'text/html; charset=utf-8';
     return [ $.page.html-status,
              [ 'Content-Type' => $type,
-               @.headers,
-               $.page.html-headers ],
+               |@.headers,
+               |$.page.html-headers ],
              [ $body ]
            ];
 }
