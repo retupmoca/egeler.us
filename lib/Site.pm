@@ -1,7 +1,8 @@
 unit class Site;
 
+use Path::Router;
 use Web::Request;
-use Render::HTML;
+
 use Session;
 use Config;
 
@@ -13,37 +14,16 @@ use Section::SAML;
 use Section::Blog;
 
 has @!dispatch-list;
+has $!router;
 has $!sessions;
 
 submethod BUILD() {
-    # redirect retupmoca.com to andrew's blog posts
-    @!dispatch-list.push([-> $r, $s { $r.host eq 'retupmoca.com' },
-                             Page::Redirect.new(:code(301), :url('https://egeler.us/blog/u/andrew'))]);
-    # ensure that we are https and on egeler.us
-    @!dispatch-list.push([-> $r, $s { 
-                                        if $r.host ne 'egeler.us'
-                                           || $r.proto ne 'https' {
-                                            True;
-                                        }
-                                        else {
-                                            False;
-                                        }
-                                    },
-                                    Page::Redirect.new(:code(301),
-                                                       :url('https://egeler.us/'))]);
-
+    $!router = Path::Router.new;
     # we have no homepage; redirect to the blog
-    @!dispatch-list.push([
-        -> $r, $s {
-            $r.uri eq '/';
-        }, Page::Redirect.new(:code(302), :url('/blog'))]);
-    @!dispatch-list.push([
-        -> $r, $s {
-            $r.uri ~~ /^\/login/;
-        }, Page::Login]);
-    @!dispatch-list.append(Section::Blog.dispatch('/blog'));
-    @!dispatch-list.append(Section::SAML.dispatch('/saml2'));
-    @!dispatch-list.push([-> $r, $s { True }, Page::NotFound]);
+    $!router.add-route('', target => Page::Redirect.new(:code(301), :url('/blog')));
+    $!router.add-route('login', target => Page::Login);
+    $!router.include-router('blog' => Section::Blog.router);
+    $!router.include-router('saml2' => Section::SAML.router);
 
     $!sessions = SessionManager.new;
 }
@@ -54,44 +34,33 @@ method handle(%env) {
     # if load-high return [ 503, [], [ 'oh god it burns' ]];
 
     my $request = Web::Request.new(%env);
-    my $session = $!sessions.load($request.cookies<session>);
-    my @headers;
-    unless $session {
-        $session = $!sessions.create();
-        @headers.push('Set-Cookie' => 'session=' ~ $session.id ~ '; path=/');
+
+    # initial redirects
+    if $request.host eq 'retupmoca.com' {
+        return Page::Redirect.new(:code(301), :url('https://egeler.us/blog/u/andrew')).handle(:$request);
     }
-
-    my $page;
-    for @!dispatch-list {
-        # if this call does anything beyond a simple true/false check,
-        # then you're doing it Wrong(tm)
-        if $_[0].($request, $session) {
-            # $_[1] wants to process this request
-
-            if $_[1].defined {
-                $page = $_[1];
-            }
-            else {
-                $page = $_[1].new(:$request, :$session);
-            }
-
-            if $page {
-                # and it wants to render the page
-                last;
-            }
-            else {
-                # ...but declines to render the page - continue searching
-                # for a page display
-                next;
-            }
+    elsif $request.host ne 'egeler.us' || $request.proto ne 'https' {
+        return Page::Redirect.new(:code(301), :url('https://egeler.us/')).handle(:$request);
+    }
+    else {
+        my $session = $!sessions.load($request.cookies<session>);
+        my @headers;
+        unless $session {
+            $session = $!sessions.create();
+            @headers.push('Set-Cookie' => 'session=' ~ $session.id ~ '; path=/');
         }
-    }
 
-    my $template-base = Config.get('template-base');
-    my $render = Render::HTML.new(:$template-base,
-                                  :$page,
-                                  :@headers);
-    return $render.output;
+        my $page = $!router.match($request.uri);
+        my $resp;
+        if $page {
+             $resp = $page.target.handle(:$request, :$session);
+        }
+        else {
+            return Page::NotFound.handle(:$request, :$session);
+        }
+        $resp[1].append: @headers;
+        return $resp;
+    }
 
     CATCH {
         default {

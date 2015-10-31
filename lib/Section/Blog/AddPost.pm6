@@ -1,12 +1,10 @@
-use HTMLPage;
 use Section::Blog::Data::Post;
 use Page::Redirect;
+use Site::Template;
 
-unit class Section::Blog::AddPost does HTMLPage;
+unit class Section::Blog::AddPost;
 
-method html-template { 'add-blog-post.tmpl' }
-
-method new(:$request, :$session) {
+method handle(:$request, :$session) {
     if $request.method eq 'POST' {
         my @tags = $request.params<tags>.split(/\,/);
         @tags.map(-> $_ is rw { $_ ~~ s/^\s+//; $_ ~~ s/\s+$//; });
@@ -18,7 +16,9 @@ method new(:$request, :$session) {
 
         $p.save;
 
-        return Page::Redirect.new(:code(302), :url('/blog'));
+        return Page::Redirect.new(:code(302), :url('/blog'))
+                             .handle(:$request, :$session);
     }
-    self.bless(:$request, :$session);
+    return [200, [ 'Content-Type', 'text/html' ],
+            [ Site::Template.new(:file('add-blog-post.tmpl')).render() ]];
 }

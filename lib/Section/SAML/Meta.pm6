@@ -1,10 +1,9 @@
-use HTMLPage;
 use Auth::SAML2::EntityDescriptor;
 use Config;
 
-unit class Section::SAML::Meta does HTMLPage;
+unit class Section::SAML::Meta;
 
-method html-data { 
+method handle { 
     my $x509-pem = Config.get('saml-local-idp')<cert>;
     my $meta = Auth::SAML2::EntityDescriptor.new(
                 :entity-id('https://egeler.us/saml2/metadata'),
@@ -15,6 +14,5 @@ method html-data {
                                       'EmailAddress' => 'andrew@egeler.us'),
                 :single-sign-on-service('HTTP-POST' => 'https://egeler.us/saml2/auth'),
                 :$x509-pem);
-    return ~$meta;
+    return [200, [ 'Content-Type' => 'text/xml' ], [ ~$meta ] ];
 }
-method html-type { 'text/xml' }

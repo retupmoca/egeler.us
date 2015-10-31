@@ -1,12 +1,10 @@
-use HTMLPage;
 use Section::Blog::Data::Post;
 use Page::Redirect;
+use Site::Template;
 
-unit class Section::Blog::Post does HTMLPage;
+unit class Section::Blog::Post;
 
-method html-template { 'blog-post.tmpl' }
-
-method new(:$request, :$session) {
+method handle(:$request, :$session) {
     if $request.uri ~~ /\/(\d+)\/delete$/ {
         my $id = $0;
         my $p = Section::Blog::Data::Post.load(:$id);
@@ -14,18 +12,15 @@ method new(:$request, :$session) {
         die "Not authorized" unless $p.author eq $session.data<local-login>;
 
         $p.delete;
-        return Page::Redirect.new(:code(302), :url('/blog'));
+        return Page::Redirect.new(:code(302), :url('/blog'))
+                             .handle(:$request, :$session);
     }
-    self.bless(:$request, :$session);
-}
-
-method data {
-    $.request.uri ~~ /\/(\d+)/;
+    $request.uri ~~ /\/(\d+)/;
     my $id = $0;
     my $p = Section::Blog::Data::Post.load(:$id);
     my %d;
 
-    if $.session.data<local-login> && $p.author eq $.session.data<local-login> {
+    if $session.data<local-login> && $p.author eq $session.data<local-login> {
         %d<own-post> = 1;
     }
 
@@ -36,5 +31,6 @@ method data {
     %d<author> = $p.author;
     %d<posted> = $p.posted.Str.subst(/Z$/, '').subst(/T/, ' ');
 
-    return %d;
+    return [200, [ 'Content-Type' => 'text/html' ],
+            [ Site::Template.new(:file('blog-post.tmpl')).render(%d) ]];
 }

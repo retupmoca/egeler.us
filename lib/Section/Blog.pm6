@@ -5,27 +5,12 @@ use Section::Blog::AddPost;
 use Section::Blog::EditPost;
 use Section::Blog::Post;
 
-method dispatch($basepath) {
-    my @d;
-    @d.push([
-        -> $r, $s {
-            my $uri = $r.uri;
-            $uri ~~ s/\?.+$//;
-            $uri eq $basepath
-            || $uri ~~ /^$basepath\/u\/<-[\/]>+$/;
-        }, Section::Blog::Home]);
-    @d.push([
-        -> $r, $s {
-            $r.uri eq $basepath ~ '/add-post'
-            && $s.data<local-login>;
-        }, Section::Blog::AddPost]);
-    @d.push([
-        -> $r, $s {
-            $r.uri ~~ /^$basepath\/p\/\d+\/edit/;
-        }, Section::Blog::EditPost]);
-    @d.push([
-        -> $r, $s {
-            $r.uri ~~ /^$basepath\/p\//;
-        }, Section::Blog::Post]);
-    return @d;
+method router {
+    my $router = Path::Router.new;
+    $router.add-route('', target => Section::Blog::Home);
+    $router.add-route('u/:login', target => Section::Blog::Home);
+    $router.add-route('add-post', target => Section::Blog::AddPost);
+    $router.add-route('p/:id/edit', target => Section::Blog::EditPost);
+    $router.add-route('p/:id', target => Section::Blog::Post);
+    return $router;
 }

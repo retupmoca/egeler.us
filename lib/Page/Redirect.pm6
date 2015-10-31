@@ -1,13 +1,6 @@
-use HTMLPage;
-
-unit class Page::Redirect does HTMLPage;
+unit class Page::Redirect;
 
 has $.code;
 has $.url;
 
-method html-status { $!code }
-method html-headers {
-    my @h;
-    @h.push('Location' => $!url);
-    return @h;
-}
+method handle(:$request, :$session) { [ $.code, [ 'Location' => $.url ], []] }

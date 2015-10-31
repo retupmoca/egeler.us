@@ -1,6 +1,8 @@
-use HTMLPage;
+use Site::Template;
 
-unit class Page::NotFound does HTMLPage;
+unit class Page::NotFound;
 
-method html-template { '404.html' }
-method html-status { 404 }
+method handle(:$request, :$session) {
+    my $tmpl = Site::Template.new(:file('404.html'));
+    return [ 404, [ 'Content-Type' => 'text/html' ], [ $tmpl.render() ]];
+}

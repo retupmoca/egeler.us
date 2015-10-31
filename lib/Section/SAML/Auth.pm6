@@ -1,17 +1,16 @@
-use HTMLPage;
 use MIME::Base64;
 use Auth::SAML2::AuthnRequest;
 use Config;
 use XML;
+use Page::Redirect;
 
-unit class Section::SAML::Auth does HTMLPage;
+unit class Section::SAML::Auth;
 
-method html-status { 302 }
-method html-headers { 
+method handle(:$request, :$session) { 
     my $redirect;
-    if $.request.method eq 'POST' {
+    if $request.method eq 'POST' {
         my $sp-info = Config.get('saml-remote-sp');
-        my $authn-str = MIME::Base64.decode-str($.request.params<SAMLRequest>);
+        my $authn-str = MIME::Base64.decode-str($request.params<SAMLRequest>);
         my $authn = Auth::SAML2::AuthnRequest.new;
         $authn.parse-xml(from-xml($authn-str).root);
 
@@ -21,9 +20,9 @@ method html-headers {
                                                 && $authn.signature-cert
                                                    eq $sp-info{$authn.issuer}<x509>;
 
-        $.session.data<saml2-authn-request> = $authn;
+        $session.data<saml2-authn-request> = $authn;
 
-        if $.session.data<local-login> {
+        if $session.data<local-login> {
             $redirect = '/saml2/authrespond';
         }
         else {
@@ -33,7 +32,6 @@ method html-headers {
     else {
         die "Must use HTTP-POST";
     }
-    my @h;
-    @h.push('Location' => $redirect);
-    return @h;
+    return Page::Redirect.new(:code(302), :url($redirect))
+                         .handle(:$request, :$session);
 }

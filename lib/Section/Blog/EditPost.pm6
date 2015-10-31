@@ -1,10 +1,8 @@
-use HTMLPage;
 use Section::Blog::Data::Post;
 use Page::Redirect;
+use Site::Template;
 
-unit class Section::Blog::EditPost does HTMLPage;
-
-method html-template { 'add-blog-post.tmpl' }
+unit class Section::Blog::EditPost;
 
 method new(:$request, :$session) {
     if $request.method eq 'POST' {
@@ -23,16 +21,13 @@ method new(:$request, :$session) {
 
         $p.save;
 
-        return Page::Redirect.new(:code(302), :url('/blog'));
+        return Page::Redirect.new(:code(302), :url('/blog'))
+                             .handle(:$request, :$session);
     }
-    self.bless(:$request, :$session);
-}
-
-method data {
     my %data;
 
     %data<edit> = 1;
-    $.request.uri ~~ /\/(\d+)\//;
+    $request.uri ~~ /\/(\d+)\//;
     my $id = $0;
     my $p = Section::Blog::Data::Post.load(:$id);
 
@@ -41,7 +36,8 @@ method data {
     %data<body> = $p.body;
     %data<tags> = $p.tags.join(',');
 
-    die "Not authorized" unless $p.author eq $.session.data<local-login>;
+    die "Not authorized" unless $p.author eq $session.data<local-login>;
 
-    return %data;
+    return [200, [ 'Content-Type' => 'text/html' ],
+            [ Site::Template.new(:file('add-blog-post.tmpl')).render(%data) ]];
 }
