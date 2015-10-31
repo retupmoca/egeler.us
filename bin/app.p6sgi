@@ -1,0 +1,7 @@
+use Site;
+use Config;
+
+Config.load("/etc/perlsite.conf");
+my $site = Site.new;
+
+my $app = sub(%env) { $site.handle(%env) }
