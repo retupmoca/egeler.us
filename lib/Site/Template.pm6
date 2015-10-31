@@ -1,4 +1,5 @@
 use Config;
+use HTML::Template;
 
 unit class Site::Template;
 
