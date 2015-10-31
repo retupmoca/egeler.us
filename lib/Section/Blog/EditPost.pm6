@@ -4,7 +4,7 @@ use Site::Template;
 
 unit class Section::Blog::EditPost;
 
-method new(:$request, :$session, :%mapping) {
+method handle(:$request, :$session, :%mapping) {
     if $request.method eq 'POST' {
         my $params = $request.parameters;
         my $id = %mapping<id>;
