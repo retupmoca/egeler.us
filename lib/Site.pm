@@ -50,7 +50,9 @@ method handle(%env) {
             @headers.push('Set-Cookie' => 'session=' ~ $session.id ~ '; path=/');
         }
 
-        my $page = $!router.match($request.uri);
+        my $uri = $request.uri.subst(/\?.+$/, '');
+
+        my $page = $!router.match($uri);
         my $resp;
         if $page {
              $resp = $page.target.handle(:$request, :$session);
