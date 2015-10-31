@@ -33,6 +33,17 @@ method handle(%env) {
     # (not that this is ever going to get more than about 5 pageviews...ever)
     # if load-high return [ 503, [], [ 'oh god it burns' ]];
 
+    my $input = %env<psgi.input>;
+    if $input ~~ Blob {
+        # work around Crust::Request bug
+        %env<psgi.input> = class {
+            method seek($x, $y) { }
+            method slurp-rest(:$bin) {
+                $input;
+            }
+        }
+    }
+
     my $request = Crust::Request.new(%env);
 
     # initial redirects
@@ -43,8 +54,8 @@ method handle(%env) {
         return Page::Redirect.new(:code(301), :url('https://egeler.us/')).handle(:$request);
     }
     else {
+        $request.cookies; # work around Crust::Request bug
         my $session = $!sessions.load($request.cookies<session>);
-        my $session;
         my @headers;
         unless $session {
             $session = $!sessions.create();
