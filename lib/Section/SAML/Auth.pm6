@@ -32,6 +32,5 @@ method handle(:$request, :$session) {
     else {
         die "Must use HTTP-POST";
     }
-    return Page::Redirect.new(:code(302), :url($redirect))
-                         .handle(:$request, :$session);
+    return Page::Redirect.go(:code(302), :url($redirect));
 }

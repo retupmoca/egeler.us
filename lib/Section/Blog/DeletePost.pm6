@@ -10,6 +10,5 @@ method handle(:$request, :$session, :%mapping) {
     die "Not authorized" unless $p.author eq $session.data<local-login>;
 
     $p.delete;
-    return Page::Redirect.new(:code(302), :url('/blog'))
-                         .handle(:$request, :$session);
+    return Page::Redirect.go(:code(302), :url('/blog'));
 }

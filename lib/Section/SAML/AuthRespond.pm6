@@ -10,8 +10,7 @@ method handle(:$request, :$session) {
     my $private-pem = Config.get('saml-local-idp')<key>;
 
     unless $session.data<local-login> {
-        return Page::Redirect.new(:code(302), :url('/login?return=/saml2/authrespond'))
-                             .handle(:$request, :$session);
+        return Page::Redirect.go(:code(302), :url('/login?return=/saml2/authrespond'));
     }
 
     my $authn = $session.data<saml2-authn-request>:delete;

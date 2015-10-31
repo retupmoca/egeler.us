@@ -21,8 +21,7 @@ method handle(:$request, :$session, :%mapping) {
 
         $p.save;
 
-        return Page::Redirect.new(:code(302), :url('/blog'))
-                             .handle(:$request, :$session);
+        return Page::Redirect.go(:code(302), :url('/blog'));
     }
     my %data;
 

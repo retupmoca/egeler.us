@@ -11,8 +11,7 @@ method handle(:$request, :$session) {
         if authenticate('login', $params<user>, $params<password>) {
             $session.data<local-login> = $params<user>;
             my $return = $params<return>;
-            return Page::Redirect.new(:code(302), :url($return || '/'))
-                                 .handle(:$request, :$session);
+            return Page::Redirect.go(:code(302), :url($return || '/'));
         }
     }
 

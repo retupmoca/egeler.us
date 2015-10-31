@@ -48,10 +48,10 @@ method handle(%env) {
 
     # initial redirects
     if %env<HTTP_HOST> eq 'retupmoca.com' {
-        return Page::Redirect.new(:code(301), :url('https://egeler.us/blog/u/andrew')).handle(:$request);
+        return Page::Redirect.go(:code(301), :url('https://egeler.us/blog/u/andrew'));
     }
     elsif %env<HTTP_HOST> ne 'egeler.us' || !%env<HTTPS> {
-        return Page::Redirect.new(:code(301), :url('https://egeler.us/')).handle(:$request);
+        return Page::Redirect.go(:code(301), :url('https://egeler.us/'));
     }
     else {
         $request.cookies; # work around Crust::Request bug
