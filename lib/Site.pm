@@ -39,7 +39,7 @@ method handle(%env) {
     if %env<HTTP_HOST> eq 'retupmoca.com' {
         return Page::Redirect.new(:code(301), :url('https://egeler.us/blog/u/andrew')).handle(:$request);
     }
-    elsif %env<HTTP_HOST> ne 'egeler.us' || !$request.secure {
+    elsif %env<HTTP_HOST> ne 'egeler.us' || !%env<HTTPS> {
         return Page::Redirect.new(:code(301), :url('https://egeler.us/')).handle(:$request);
     }
     else {
