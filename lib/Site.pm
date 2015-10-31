@@ -67,7 +67,7 @@ method handle(%env) {
         my $page = $!router.match($uri);
         my $resp;
         if $page {
-             $resp = $page.target.handle(:$request, :$session);
+             $resp = $page.target.handle(:$request, :$session, :mapping($page.mapping));
         }
         else {
             return Page::NotFound.handle(:$request, :$session);

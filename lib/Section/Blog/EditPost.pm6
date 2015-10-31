@@ -4,11 +4,10 @@ use Site::Template;
 
 unit class Section::Blog::EditPost;
 
-method new(:$request, :$session) {
+method new(:$request, :$session, :%mapping) {
     if $request.method eq 'POST' {
         my $params = $request.parameters;
-        $request.request-uri ~~ /\/(\d+)\//;
-        my $id = $0;
+        my $id = %mapping<id>;
         my $p = Section::Blog::Data::Post.load(:$id);
 
         die "Not authorized" unless $p.author eq $session.data<local-login>;
@@ -28,8 +27,7 @@ method new(:$request, :$session) {
     my %data;
 
     %data<edit> = 1;
-    $request.request-uri ~~ /\/(\d+)\//;
-    my $id = $0;
+    my $id = %mapping<id>;
     my $p = Section::Blog::Data::Post.load(:$id);
 
     %data<id> = $p.id;

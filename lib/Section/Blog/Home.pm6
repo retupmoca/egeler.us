@@ -4,12 +4,10 @@ use Site::Template;
 
 unit class Section::Blog::Home;
 
-method handle(:$request, :$session) {
+method handle(:$request, :$session, :%mapping) {
     my %param;
     my $feed;
-    $request.request-uri ~~ /\/u\/(<-[\/]>+)$/;
-    my $user = $0;
-    $user ~~ s/\?.+// if $user;
+    my $user = %mapping<user>;
     my @rss-items;
 
     my $params = $request.parameters;
