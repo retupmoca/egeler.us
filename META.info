@@ -5,7 +5,6 @@
     "description" : "egeler.us website code",
     "depends" : [ "DBIish",
                   "SCGI",
-                  "Web",
                   "Crust",
                   "Path::Router",
                   "HTML::Template",

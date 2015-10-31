@@ -12,16 +12,18 @@ method handle(:$request, :$session) {
     $user ~~ s/\?.+// if $user;
     my @rss-items;
 
+    my $params = $request.parameters;
+
     my $perpage = 25;
-    my $page = $request.params<page> || 0;
+    my $page = $params<page> || 0;
 
     my @posts = Section::Blog::Data::Post.search(:author($user), 
-                                                 :tag($request.params<tag>),
+                                                 :tag($params<tag>),
                                                  :count($perpage),
                                                  :offset($perpage * $page));
     my @tposts;
     for @posts -> $p {
-        if $request.params<rss> {
+        if $params<rss> {
             @rss-items.push: Syndication::RSS::Item.new(:title($p.title),
                                                         :link('https://egeler.us/blog/p/'~$p.id),
                                                         :summary($p.body),
@@ -46,10 +48,10 @@ method handle(:$request, :$session) {
 
         @tposts.push(%d);
     }
-    if $request.params<rss> {
-        my $link = 'https://egeler.us' ~ $request.uri.subst(/\?.+/, '');
-        if $request.params<tag> {
-            $link ~= '?tag='~$request.params<tag>;
+    if $params<rss> {
+        my $link = 'https://egeler.us' ~ $request.path;
+        if $params<tag> {
+            $link ~= '?tag='~$params<tag>;
         }
         $feed = Syndication::RSS.new(:title('Egeler Blog'), :link($link),
                                       :description(''), :items(@rss-items));
@@ -61,7 +63,7 @@ method handle(:$request, :$session) {
     %param<next-page> = '?page=' ~ ($page + 1) if @posts == $perpage;
     %param<prev-page> = '?page=' ~ ($page - 1) if $page > 0;
 
-    if $request.params<rss> {
+    if $params<rss> {
         return [ 200, [ 'Content-Type' => 'text/xml; charset=utf-8' ], [ ~$feed ]];
     }
     else {

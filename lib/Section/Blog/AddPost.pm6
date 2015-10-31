@@ -6,11 +6,12 @@ unit class Section::Blog::AddPost;
 
 method handle(:$request, :$session) {
     if $request.method eq 'POST' {
-        my @tags = $request.params<tags>.split(/\,/);
+        my $params = $request.parameters;
+        my @tags = $params<tags>.split(/\,/);
         @tags.map(-> $_ is rw { $_ ~~ s/^\s+//; $_ ~~ s/\s+$//; });
         @tags = @tags.grep({$_});
-        my $p = Section::Blog::Data::Post.new(:title($request.params<title>),
-                                              :body($request.params<body>),
+        my $p = Section::Blog::Data::Post.new(:title($params<title>),
+                                              :body($params<body>),
                                               :author($session.data<local-login>),
                                               :tags(@tags));
 

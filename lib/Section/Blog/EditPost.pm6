@@ -6,15 +6,16 @@ unit class Section::Blog::EditPost;
 
 method new(:$request, :$session) {
     if $request.method eq 'POST' {
+        my $params = $request.parameters;
         $request.uri ~~ /\/(\d+)\//;
         my $id = $0;
         my $p = Section::Blog::Data::Post.load(:$id);
 
         die "Not authorized" unless $p.author eq $session.data<local-login>;
 
-        $p.title = $request.params<title>;
-        $p.body = $request.params<body>;
-        my @tags = $request.params<tags>.split(/\,/);
+        $p.title = $params<title>;
+        $p.body = $params<body>;
+        my @tags = $params<tags>.split(/\,/);
         @tags.map(-> $_ is rw { $_ ~~ s/^\s+//; $_ ~~ s/\s+$//; });
         @tags = @tags.grep({$_});
         $p.tags = @tags;

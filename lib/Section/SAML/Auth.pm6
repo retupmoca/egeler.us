@@ -10,7 +10,7 @@ method handle(:$request, :$session) {
     my $redirect;
     if $request.method eq 'POST' {
         my $sp-info = Config.get('saml-remote-sp');
-        my $authn-str = MIME::Base64.decode-str($request.params<SAMLRequest>);
+        my $authn-str = MIME::Base64.decode-str($request.parameters<SAMLRequest>);
         my $authn = Auth::SAML2::AuthnRequest.new;
         $authn.parse-xml(from-xml($authn-str).root);
 

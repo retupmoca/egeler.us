@@ -1,7 +1,7 @@
 unit class Site;
 
 use Path::Router;
-use Web::Request;
+use Crust::Request;
 
 use Session;
 use Config;
@@ -33,13 +33,13 @@ method handle(%env) {
     # (not that this is ever going to get more than about 5 pageviews...ever)
     # if load-high return [ 503, [], [ 'oh god it burns' ]];
 
-    my $request = Web::Request.new(%env);
+    my $request = Crust::Request.new(%env);
 
     # initial redirects
-    if $request.host eq 'retupmoca.com' {
+    if %env<SERVER_NAME> eq 'retupmoca.com' {
         return Page::Redirect.new(:code(301), :url('https://egeler.us/blog/u/andrew')).handle(:$request);
     }
-    elsif $request.host ne 'egeler.us' || $request.proto ne 'https' {
+    elsif %env<SERVER_NAME> ne 'egeler.us' || !$request.secure {
         return Page::Redirect.new(:code(301), :url('https://egeler.us/')).handle(:$request);
     }
     else {
@@ -50,7 +50,7 @@ method handle(%env) {
             @headers.push('Set-Cookie' => 'session=' ~ $session.id ~ '; path=/');
         }
 
-        my $uri = $request.uri.subst(/\?.+$/, '');
+        my $uri = $request.path;
 
         my $page = $!router.match($uri);
         my $resp;
