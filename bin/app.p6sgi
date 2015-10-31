@@ -10,6 +10,6 @@ my $site = Site.new;
 my $app = sub (%env) { $site.handle(%env) }
 
 builder {
-    enable 'StackTrace';
+    enable 'StackTrace', no-print-errors => 1;
     $app;
 };
