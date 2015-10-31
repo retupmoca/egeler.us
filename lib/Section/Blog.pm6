@@ -1,3 +1,5 @@
+use Path::Router;
+
 unit class Section::Blog;
 
 use Section::Blog::Home;

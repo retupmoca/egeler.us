@@ -1,3 +1,5 @@
+use Path::Router;
+
 unit class Section::SAML;
 
 use Section::SAML::Meta;
