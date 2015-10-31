@@ -1,3 +1,6 @@
+use Crust::Builder;
+use Crust::Middleware::StackTrace;
+
 use Site;
 use Config;
 
@@ -5,3 +8,8 @@ Config.load("/etc/perlsite.conf");
 my $site = Site.new;
 
 my $app = sub (%env) { $site.handle(%env) }
+
+builder {
+    enable 'StackTrace';
+    $app;
+};
