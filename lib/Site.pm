@@ -77,6 +77,10 @@ method handle(%env) {
     }
 
     CATCH {
+        when X::Multi::NoMatch {
+            # assume that the URI is valid, but the method (or similar) was not
+            return [ 400, [], []];
+        }
         default {
             # display_errors = On
             # TODO: Stop being PHP. Nobody likes that guy.
