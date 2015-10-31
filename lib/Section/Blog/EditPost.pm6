@@ -7,7 +7,7 @@ unit class Section::Blog::EditPost;
 method new(:$request, :$session) {
     if $request.method eq 'POST' {
         my $params = $request.parameters;
-        $request.uri ~~ /\/(\d+)\//;
+        $request.request-uri ~~ /\/(\d+)\//;
         my $id = $0;
         my $p = Section::Blog::Data::Post.load(:$id);
 
@@ -28,7 +28,7 @@ method new(:$request, :$session) {
     my %data;
 
     %data<edit> = 1;
-    $request.uri ~~ /\/(\d+)\//;
+    $request.request-uri ~~ /\/(\d+)\//;
     my $id = $0;
     my $p = Section::Blog::Data::Post.load(:$id);
 

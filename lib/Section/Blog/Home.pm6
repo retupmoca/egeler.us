@@ -7,7 +7,7 @@ unit class Section::Blog::Home;
 method handle(:$request, :$session) {
     my %param;
     my $feed;
-    $request.uri ~~ /\/u\/(<-[\/]>+)$/;
+    $request.request-uri ~~ /\/u\/(<-[\/]>+)$/;
     my $user = $0;
     $user ~~ s/\?.+// if $user;
     my @rss-items;
@@ -49,7 +49,7 @@ method handle(:$request, :$session) {
         @tposts.push(%d);
     }
     if $params<rss> {
-        my $link = 'https://egeler.us' ~ $request.path;
+        my $link = 'https://egeler.us' ~ $request.request-uri.subst(/\?.+$/, '');
         if $params<tag> {
             $link ~= '?tag='~$params<tag>;
         }

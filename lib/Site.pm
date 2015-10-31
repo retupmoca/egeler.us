@@ -44,13 +44,14 @@ method handle(%env) {
     }
     else {
         my $session = $!sessions.load($request.cookies<session>);
+        my $session;
         my @headers;
         unless $session {
             $session = $!sessions.create();
             @headers.push('Set-Cookie' => 'session=' ~ $session.id ~ '; path=/');
         }
 
-        my $uri = $request.path;
+        my $uri = $request.request-uri.subst(/\?.+$/, '');
 
         my $page = $!router.match($uri);
         my $resp;

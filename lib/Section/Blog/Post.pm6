@@ -5,7 +5,7 @@ use Site::Template;
 unit class Section::Blog::Post;
 
 method handle(:$request, :$session) {
-    if $request.uri ~~ /\/(\d+)\/delete$/ {
+    if $request.request-uri ~~ /\/(\d+)\/delete$/ {
         my $id = $0;
         my $p = Section::Blog::Data::Post.load(:$id);
 
@@ -15,7 +15,7 @@ method handle(:$request, :$session) {
         return Page::Redirect.new(:code(302), :url('/blog'))
                              .handle(:$request, :$session);
     }
-    $request.uri ~~ /\/(\d+)/;
+    $request.request-uri ~~ /\/(\d+)/;
     my $id = $0;
     my $p = Section::Blog::Data::Post.load(:$id);
     my %d;

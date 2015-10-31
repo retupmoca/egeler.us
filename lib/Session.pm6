@@ -4,7 +4,7 @@ class Session {
     has %.data is rw;
 
     method new(:$id is copy){
-        $id = ('a'..'z','A'..'Z','0'..'9').roll(32).join unless $id;
+        $id = ('a'..'z','A'..'Z','0'..'9').flat.roll(32).join unless $id;
         my %foo;
         self.bless(:$id, :seen(time), :data(%foo));
     }
