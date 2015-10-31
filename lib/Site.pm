@@ -22,8 +22,8 @@ submethod BUILD() {
     # we have no homepage; redirect to the blog
     $!router.add-route('', target => Page::Redirect.new(:code(301), :url('/blog')));
     $!router.add-route('login', target => Page::Login);
-    $!router.include-router('blog' => Section::Blog.router);
-    $!router.include-router('saml2' => Section::SAML.router);
+    $!router.include-router('blog/' => Section::Blog.router);
+    $!router.include-router('saml2/' => Section::SAML.router);
 
     $!sessions = SessionManager.new;
 }

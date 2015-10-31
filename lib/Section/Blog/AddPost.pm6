@@ -19,6 +19,6 @@ method handle(:$request, :$session) {
         return Page::Redirect.new(:code(302), :url('/blog'))
                              .handle(:$request, :$session);
     }
-    return [200, [ 'Content-Type', 'text/html' ],
+    return [200, [ 'Content-Type' => 'text/html' ],
             [ Site::Template.new(:file('add-blog-post.tmpl')).render() ]];
 }
