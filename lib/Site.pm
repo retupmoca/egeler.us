@@ -36,10 +36,10 @@ method handle(%env) {
     my $request = Crust::Request.new(%env);
 
     # initial redirects
-    if %env<SERVER_NAME> eq 'retupmoca.com' {
+    if %env<HTTP_HOST> eq 'retupmoca.com' {
         return Page::Redirect.new(:code(301), :url('https://egeler.us/blog/u/andrew')).handle(:$request);
     }
-    elsif %env<SERVER_NAME> ne 'egeler.us' || !$request.secure {
+    elsif %env<HTTP_HOST> ne 'egeler.us' || !$request.secure {
         return Page::Redirect.new(:code(301), :url('https://egeler.us/')).handle(:$request);
     }
     else {
