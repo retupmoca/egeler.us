@@ -11,7 +11,12 @@ multi method render(*%params) {
 
 multi method render(%params) {
     my $base = Config.get('template-base');
-    my $template = HTML::Template.from_file($base ~ '/' ~ $.file);
+    my $fullpath = $.file;
+    unless $.file ~~ /^\// {
+        $fullpath = $base ~ '/' ~ $.file;
+    }
+    my $template = HTML::Template.from_file($fullpath);
+    %params<TMPL_PATH> = $base ~ '/';
     $template.with_params(%params);
     return $template.output;
 }
