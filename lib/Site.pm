@@ -29,17 +29,6 @@ method handle(%env) {
     # (not that this is ever going to get more than about 5 pageviews...ever)
     # if load-high return [ 503, [], [ 'oh god it burns' ]];
 
-    my $input = %env<p6sgi.input>;
-    if $input ~~ Blob {
-        # work around Crust::Request bug
-        %env<p6sgi.input> = class {
-            method seek($x, $y) { }
-            method slurp-rest(:$bin) {
-                $input;
-            }
-        }
-    }
-
     my $request = Crust::Request.new(%env);
 
     # initial redirects

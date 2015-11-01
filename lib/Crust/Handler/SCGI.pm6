@@ -1,6 +1,7 @@
 use v6;
 
 use SCGI;
+use IO::Blob;
 
 unit class Crust::Handler::SCGI;
 
@@ -11,5 +12,11 @@ submethod BUILD(:$host, :$port) {
 }
 
 method run($app) {
+    my $app = -> %env {
+        my $input = %env<p6sgi.input>;
+        $input = IO::Blob.new($input) if $input && $input ~~ Blob;
+        %env<p6sgi.input> = $input;
+        $app(%env);
+    };
     $!scgi.handle: $app;
 }

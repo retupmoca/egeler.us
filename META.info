@@ -11,6 +11,7 @@
                   "HTML::Template",
                   "MIME::Base64",
                   "XML",
+                  "IO::Blob",
                   "Auth::SAML2",
                   "Auth::PAM::Simple",
                   "Syndication",
