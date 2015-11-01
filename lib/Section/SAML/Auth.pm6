@@ -20,7 +20,7 @@ method handle(:$request, :$session) {
                                                 && $authn.signature-cert
                                                    eq $sp-info{$authn.issuer}<x509>;
 
-        $session.data<saml2-authn-request> = $authn;
+        $session.set('saml2-authn-request', $authn);
 
         if $session.data<local-login> {
             $redirect = '/saml2/authrespond';

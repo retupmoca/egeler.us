@@ -11,7 +11,7 @@ method display_login($return) {
                             .render(return => $return) ]];
 }
 
-multi method handle(:$request! where { $_.method eq 'GET' }, :$session) {
+multi method handle(:$request! where { $_.method eq 'GET' }) {
     my $params = $request.parameters;
 
     return self.display_login($params<return>);
@@ -21,7 +21,7 @@ multi method handle(:$request! where { $_.method eq 'POST' }, :$session) {
     my $params = $request.parameters;
 
     if authenticate('login', $params<user>, $params<password>) {
-        $session.data<local-login> = $params<user>;
+        $session.set('local-login', $params<user>);
         my $return = $params<return>;
         return Page::Redirect.go(:code(302), :url($return || '/'));
     }

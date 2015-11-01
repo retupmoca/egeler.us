@@ -13,9 +13,11 @@ method handle(:$request, :$session) {
         return Page::Redirect.go(:code(302), :url('/login?return=/saml2/authrespond'));
     }
 
-    my $authn = $session.data<saml2-authn-request>:delete;
+    my $authn = $session.get('saml2-authn-request');
 
     die "No current auth request" unless $authn;
+
+    $session.remove('saml2-authn-request');
 
     die "Unknown remote: " ~ $authn.issuer unless $sp-info{$authn.issuer};
 

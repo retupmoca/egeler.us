@@ -3,7 +3,6 @@ unit class Site;
 use Path::Router;
 use Crust::Request;
 
-use Session;
 use Config;
 
 use Page::NotFound;
@@ -15,7 +14,6 @@ use Section::Blog;
 
 has @!dispatch-list;
 has $!router;
-has $!sessions;
 
 submethod BUILD() {
     $!router = Path::Router.new;
@@ -24,8 +22,6 @@ submethod BUILD() {
     $!router.add-route('login', target => Page::Login);
     $!router.include-router('blog/' => Section::Blog.router);
     $!router.include-router('saml2/' => Section::SAML.router);
-
-    $!sessions = SessionManager.new;
 }
 
 method handle(%env) {
@@ -54,13 +50,7 @@ method handle(%env) {
         return Page::Redirect.go(:code(301), :url('https://egeler.us/'));
     }
     else {
-        $request.cookies; # work around Crust::Request bug
-        my $session = $!sessions.load($request.cookies<session>);
-        my @headers;
-        unless $session {
-            $session = $!sessions.create();
-            @headers.push('Set-Cookie' => 'session=' ~ $session.id ~ '; path=/');
-        }
+        my $session = %env<p6sgi.session>;
 
         my $uri = $request.request-uri.subst(/\?.+$/, '');
 
@@ -72,7 +62,6 @@ method handle(%env) {
         else {
             return Page::NotFound.handle(:$request, :$session);
         }
-        $resp[1].append: @headers;
         return $resp;
     }
 

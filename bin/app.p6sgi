@@ -1,5 +1,6 @@
 use Crust::Builder;
 use Crust::Middleware::StackTrace;
+use Crust::Middleware::Session;
 
 use Site;
 use Config;
@@ -9,7 +10,9 @@ my $site = Site.new;
 
 my $app = sub (%env) { $site.handle(%env) }
 
+my $store = Crust::Middleware::Session::Store.new();
 builder {
     enable 'StackTrace', no-print-errors => True;
+    enable 'Session', store => $store;
     $app;
 };
