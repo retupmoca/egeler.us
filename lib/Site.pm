@@ -70,5 +70,8 @@ method handle(%env) {
             # assume that the URI is valid, but the method (or similar) was not
             return [ 400, [], []];
         }
+        default {
+            return [ 500, [ "Content-Type" => 'text/plain' ], [ $_.gist ] ];
+        }
     }
 }
