@@ -22,8 +22,8 @@ multi method render(%params) {
     #
     # wtf
     ##
-    #my $template = HTML::Template.from_file($fullpath);
-    my $template = HTML::Template.new(:in(slurp($fullpath)), :file($fullpath));
+    my $template = HTML::Template.from_file($fullpath);
+    #my $template = HTML::Template.new(:in(slurp($fullpath)), :file($fullpath));
 
     %params<TMPL_PATH> = $base ~ '/';
     $template.with_params(%params);

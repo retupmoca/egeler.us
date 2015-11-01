@@ -50,7 +50,7 @@ method handle(%env) {
         return Page::Redirect.go(:code(301), :url('https://egeler.us/'));
     }
     else {
-        my $session = %env<p6sgi.session>;
+        my $session = %env<p6sgix.session>;
 
         my $uri = $request.request-uri.subst(/\?.+$/, '');
 
