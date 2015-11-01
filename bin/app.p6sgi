@@ -10,7 +10,7 @@ my $site = Site.new;
 
 my $app = sub (%env) { $site.handle(%env) }
 
-my $store = Crust::Middleware::Session::Store.new();
+my $store = Crust::Middleware::Session::Store::Memory.new();
 builder {
     enable 'StackTrace', no-print-errors => True;
     enable 'Session', store => $store;
