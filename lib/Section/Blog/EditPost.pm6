@@ -4,13 +4,13 @@ use Site::Template;
 
 unit class Section::Blog::EditPost;
 
-method handle(:$request, :$session, :%mapping) {
+method handle(:$request, :%mapping) {
     if $request.method eq 'POST' {
         my $params = $request.parameters;
         my $id = %mapping<id>;
         my $p = Section::Blog::Data::Post.load(:$id);
 
-        die "Not authorized" unless $p.author eq $session.data<local-login>;
+        die "Not authorized" unless $p.author eq $request.session.data<local-login>;
 
         $p.title = $params<title>;
         $p.body = $params<body>;
@@ -34,7 +34,7 @@ method handle(:$request, :$session, :%mapping) {
     %data<body> = $p.body;
     %data<tags> = $p.tags.join(',');
 
-    die "Not authorized" unless $p.author eq $session.data<local-login>;
+    die "Not authorized" unless $p.author eq $request.session.data<local-login>;
 
     return [200, [ 'Content-Type' => 'text/html' ],
             [ Site::Template.new(:file('add-blog-post.tmpl')).render(%data) ]];

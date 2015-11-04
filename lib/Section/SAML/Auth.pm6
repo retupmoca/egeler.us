@@ -6,7 +6,7 @@ use Page::Redirect;
 
 unit class Section::SAML::Auth;
 
-method handle(:$request, :$session) { 
+method handle(:$request) { 
     my $redirect;
     if $request.method eq 'POST' {
         my $sp-info = Config.get('saml-remote-sp');
@@ -20,9 +20,9 @@ method handle(:$request, :$session) {
                                                 && $authn.signature-cert
                                                    eq $sp-info{$authn.issuer}<x509>;
 
-        $session.set('saml2-authn-request', $authn);
+        $request.session.set('saml2-authn-request', $authn);
 
-        if $session.data<local-login> {
+        if $request.session.data<local-login> {
             $redirect = '/saml2/authrespond';
         }
         else {

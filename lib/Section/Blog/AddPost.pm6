@@ -4,7 +4,7 @@ use Site::Template;
 
 unit class Section::Blog::AddPost;
 
-method handle(:$request, :$session) {
+method handle(:$request) {
     if $request.method eq 'POST' {
         my $params = $request.parameters;
         my @tags = $params<tags>.split(/\,/);
@@ -12,7 +12,7 @@ method handle(:$request, :$session) {
         @tags = @tags.grep({$_});
         my $p = Section::Blog::Data::Post.new(:title($params<title>),
                                               :body($params<body>),
-                                              :author($session.data<local-login>),
+                                              :author($request.session.data<local-login>),
                                               :tags(@tags));
 
         $p.save;

@@ -4,10 +4,11 @@ use Page::Redirect;
 
 unit class Section::SAML::AuthRespond;
 
-method handle(:$request, :$session) {
+method handle(:$request) {
     my $sp-info = Config.get('saml-remote-sp');
     my $x509-pem = Config.get('saml-local-idp')<cert>;
     my $private-pem = Config.get('saml-local-idp')<key>;
+    my $session = $request.session;
 
     unless $session.data<local-login> {
         return Page::Redirect.go(:code(302), :url('/login?return=/saml2/authrespond'));

@@ -17,11 +17,11 @@ multi method handle(:$request! where { $_.method eq 'GET' }) {
     return self.display_login($params<return>);
 }
 
-multi method handle(:$request! where { $_.method eq 'POST' }, :$session) {
+multi method handle(:$request! where { $_.method eq 'POST' }) {
     my $params = $request.parameters;
 
     if authenticate('login', $params<user>, $params<password>) {
-        $session.set('local-login', $params<user>);
+        $request.session.set('local-login', $params<user>);
         my $return = $params<return>;
         return Page::Redirect.go(:code(302), :url($return || '/'));
     }

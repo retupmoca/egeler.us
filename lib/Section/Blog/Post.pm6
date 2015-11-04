@@ -3,8 +3,9 @@ use Site::Template;
 
 unit class Section::Blog::Post;
 
-method handle(:$request, :$session, :%mapping) {
+method handle(:$request, :%mapping) {
     my $id = %mapping<id>;
+    my $session = $request.session;
     my $p = Section::Blog::Data::Post.load(:$id);
     my %d;
 

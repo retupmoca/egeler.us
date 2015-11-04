@@ -39,17 +39,15 @@ method handle(%env) {
         return Page::Redirect.go(:code(301), :url('https://egeler.us/'));
     }
     else {
-        my $session = %env<p6sgix.session>;
-
         my $uri = $request.request-uri.subst(/\?.+$/, '');
 
         my $page = $!router.match($uri);
         my $resp;
         if $page {
-             $resp = $page.target.handle(:$request, :$session, :mapping($page.mapping));
+             $resp = $page.target.handle(:$request, :mapping($page.mapping));
         }
         else {
-            return Page::NotFound.handle(:$request, :$session);
+            return Page::NotFound.handle(:$request);
         }
         return $resp;
     }
