@@ -1,26 +1,30 @@
 use Config;
 use Auth::SAML2::Assertion;
 use Page::Redirect;
+use Crust::Request;
 
 unit class Section::SAML::AuthRespond;
 
-method handle(:$request) {
+subset Authed of Crust::Request where { so $_.session.data<local-login> };
+subset Anon of Crust::Request where { !($_.session.data<local-login>) };
+
+subset ValidAuthRequest of Crust::Request where {
+    my $authn = $_.session.get('saml2-authn-request');
+    $authn && Config.get('saml-remote-sp'){$authn.issuer};
+};
+
+multi method handle(:$request where Anon) {
+    return Page::Redirect.go(:code(302), :url('/login?return=/saml2/authrespond'));
+}
+
+multi method handle(:$request where Authed & ValidAuthRequest) {
     my $sp-info = Config.get('saml-remote-sp');
     my $x509-pem = Config.get('saml-local-idp')<cert>;
     my $private-pem = Config.get('saml-local-idp')<key>;
     my $session = $request.session;
 
-    unless $session.data<local-login> {
-        return Page::Redirect.go(:code(302), :url('/login?return=/saml2/authrespond'));
-    }
-
     my $authn = $session.get('saml2-authn-request');
-
-    die "No current auth request" unless $authn;
-
     $session.remove('saml2-authn-request');
-
-    die "Unknown remote: " ~ $authn.issuer unless $sp-info{$authn.issuer};
 
     my %attributes;
     %attributes<email> = [ $session.data<local-login> ~ '@egeler.us' ];
