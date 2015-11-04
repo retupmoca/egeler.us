@@ -6,6 +6,7 @@
     "depends" : [ "DBIish",
                   "Crust",
                   "Crust::Middleware::Session",
+                  "Crust::Middleware::Syslog",
                   "Crust::Handler::SCGI",
                   "Path::Router",
                   "HTML::Template",

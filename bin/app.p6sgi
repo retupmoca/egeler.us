@@ -1,6 +1,7 @@
 use Crust::Builder;
 use Crust::Middleware::StackTrace;
 use Crust::Middleware::Session;
+use Crust::Middleware::Syslog;
 
 use Site;
 use Config;
@@ -14,5 +15,6 @@ my $store = Crust::Middleware::Session::Store::Memory.new();
 builder {
     enable 'StackTrace', no-print-errors => True;
     enable 'Session', store => $store;
+    enable 'Syslog';
     $app;
 };
