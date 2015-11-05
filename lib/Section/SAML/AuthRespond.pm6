@@ -1,3 +1,4 @@
+use Site::Tools;
 use Config;
 use Auth::SAML2::Assertion;
 use Page::Redirect;
@@ -5,25 +6,16 @@ use Crust::Request;
 
 unit class Section::SAML::AuthRespond;
 
-subset Authed of Crust::Request where { so $_.session.data<local-login> };
-subset Anon of Crust::Request where { !($_.session.data<local-login>) };
-
-subset ValidAuthRequest of Crust::Request where {
-    my $authn = $_.session.get('saml2-authn-request');
-    $authn && Config.get('saml-remote-sp'){$authn.issuer};
-};
-
-multi method handle(:$request where Anon) {
-    return Page::Redirect.go(:code(302), :url('/login?return=/saml2/authrespond'));
-}
-
-multi method handle(:$request where Authed & ValidAuthRequest) {
+method handle(Get :$request) is authed {
     my $sp-info = Config.get('saml-remote-sp');
     my $x509-pem = Config.get('saml-local-idp')<cert>;
     my $private-pem = Config.get('saml-local-idp')<key>;
     my $session = $request.session;
 
     my $authn = $session.get('saml2-authn-request');
+
+    die X::BadRequest.new unless $authn && $sp-info{$auth.issuer};
+
     $session.remove('saml2-authn-request');
 
     my %attributes;

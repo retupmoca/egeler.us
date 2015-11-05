@@ -1,4 +1,5 @@
 use MIME::Base64;
+use Site::Tools;
 use Auth::SAML2::AuthnRequest;
 use Config;
 use XML;
@@ -6,31 +7,27 @@ use Page::Redirect;
 
 unit class Section::SAML::Auth;
 
-method handle(:$request) { 
+method handle(Post :$request) { 
     my $redirect;
-    if $request.method eq 'POST' {
-        my $sp-info = Config.get('saml-remote-sp');
-        my $authn-str = MIME::Base64.decode-str($request.parameters<SAMLRequest>);
-        my $authn = Auth::SAML2::AuthnRequest.new;
-        $authn.parse-xml(from-xml($authn-str).root);
+    my $sp-info = Config.get('saml-remote-sp');
+    my $authn-str = MIME::Base64.decode-str($request.parameters<SAMLRequest>);
+    my $authn = Auth::SAML2::AuthnRequest.new;
+    $authn.parse-xml(from-xml($authn-str).root);
 
-        die "Unknown remote: " ~ $authn.issuer unless $sp-info{$authn.issuer};
+    die X::BadRequest.new unless $sp-info{$authn.issuer};
 
-        die "Wrong key: " ~ $authn.perl unless $authn.signed
-                                                && $authn.signature-cert
-                                                   eq $sp-info{$authn.issuer}<x509>;
+    die X::BadRequest.new unless $authn.signed
+                                            && $authn.signature-cert
+                                               eq $sp-info{$authn.issuer}<x509>;
 
-        $request.session.set('saml2-authn-request', $authn);
+    $request.session.set('saml2-authn-request', $authn);
 
-        if $request.session.data<local-login> {
-            $redirect = '/saml2/authrespond';
-        }
-        else {
-            $redirect = '/login?return=/saml2/authrespond';
-        }
+    if $request ~~ Authed {
+        $redirect = '/saml2/authrespond';
     }
     else {
-        die "Must use HTTP-POST";
+        $redirect = '/login?return=/saml2/authrespond';
     }
+
     return Page::Redirect.go(:code(302), :url($redirect));
 }

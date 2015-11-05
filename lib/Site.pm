@@ -3,6 +3,7 @@ unit class Site;
 use Path::Router;
 use Crust::Request;
 
+use Site::Tools;
 use Config;
 
 use Page::NotFound;
@@ -53,9 +54,12 @@ method handle(%env) {
     }
 
     CATCH {
-        when X::Multi::NoMatch {
+        when X::Multi::NoMatch|X::TypeCheck::Binding|X::BadRequest {
             # assume that the URI is valid, but the method (or similar) was not
             return [ 400, [], []];
+        }
+        when X::PermissionDenied {
+            return [ 403, [], []];
         }
         default {
             return [ 500, [ "Content-Type" => 'text/plain' ], [ $_.gist ] ];

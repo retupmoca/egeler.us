@@ -1,3 +1,4 @@
+use Site::Tools;
 use Site::Template;
 use Page::Redirect;
 
@@ -11,13 +12,13 @@ method display_login($return) {
                             .render(return => $return) ]];
 }
 
-multi method handle(:$request! where { $_.method eq 'GET' }) {
+multi method handle(Get :$request!) {
     my $params = $request.parameters;
 
     return self.display_login($params<return>);
 }
 
-multi method handle(:$request! where { $_.method eq 'POST' }) {
+multi method handle(Post :$request!) {
     my $params = $request.parameters;
 
     if authenticate('login', $params<user>, $params<password>) {
