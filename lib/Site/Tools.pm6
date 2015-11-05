@@ -1,3 +1,5 @@
+use Crust::Request;
+
 unit module Site::Tools;
 
 subset Authed of Crust::Request is export where { so $_.session.data<local-login> }; 
