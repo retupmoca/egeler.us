@@ -4,7 +4,7 @@ use Page::Redirect;
 
 use Auth::PAM::Simple;
 
-unit class Page::Login;
+unit class Page::Login is Site::Controller;
 
 method display_login($return) {
     return [ 200, [ 'Content-Type' => 'text/html' ],

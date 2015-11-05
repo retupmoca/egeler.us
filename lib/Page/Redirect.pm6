@@ -1,4 +1,6 @@
-unit class Page::Redirect;
+use Site::Tools;
+
+unit class Page::Redirect is Site::Controller;
 
 has $.code;
 has $.url;

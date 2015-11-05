@@ -1,6 +1,6 @@
-use Path::Router;
+use Site::Tools;
 
-unit class Section::Blog;
+unit class Section::Blog is Site::Router;
 
 use Section::Blog::Home;
 use Section::Blog::AddPost;
@@ -8,13 +8,11 @@ use Section::Blog::EditPost;
 use Section::Blog::DeletePost;
 use Section::Blog::Post;
 
-method router {
-    my $router = Path::Router.new;
-    $router.add-route('', target => Section::Blog::Home);
-    $router.add-route('u/:user', target => Section::Blog::Home);
-    $router.add-route('add-post', target => Section::Blog::AddPost);
-    $router.add-route('p/:id/edit', target => Section::Blog::EditPost);
-    $router.add-route('p/:id/delete', target => Section::Blog::DeletePost);
-    $router.add-route('p/:id', target => Section::Blog::Post);
-    return $router;
+method routes {
+    $.route('',             Section::Blog::Home);
+    $.route('u/:user',      Section::Blog::Home);
+    $.route('add-post',     Section::Blog::AddPost);
+    $.route('p/:id/edit',   Section::Blog::EditPost);
+    $.route('p/:id/delete', Section::Blog::DeletePost);
+    $.route('p/:id',        Section::Blog::Post);
 }

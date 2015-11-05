@@ -2,11 +2,10 @@ use Site::Tools;
 use Config;
 use Auth::SAML2::Assertion;
 use Page::Redirect;
-use Crust::Request;
 
-unit class Section::SAML::AuthRespond;
+unit class Section::SAML::AuthRespond is Site::Controller::Authed;
 
-method handle(Get :$request) is authed {
+multi method handle(Get :$request) {
     my $sp-info = Config.get('saml-remote-sp');
     my $x509-pem = Config.get('saml-local-idp')<cert>;
     my $private-pem = Config.get('saml-local-idp')<key>;

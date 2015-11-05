@@ -5,7 +5,7 @@ use Config;
 use XML;
 use Page::Redirect;
 
-unit class Section::SAML::Auth;
+unit class Section::SAML::Auth is Site::Controller;
 
 method handle(Post :$request) { 
     my $redirect;

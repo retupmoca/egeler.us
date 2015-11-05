@@ -1,8 +1,9 @@
+use Site::Tools;
 use Section::Blog::Data::Post;
 use Syndication;
 use Site::Template;
 
-unit class Section::Blog::Home;
+unit class Section::Blog::Home is Site::Controller;
 
 method handle(:$request, :%mapping) {
     my %param;

@@ -1,9 +1,10 @@
+use Site::Tools;
 use Section::Blog::Data::Post;
 use Site::Template;
 
-unit class Section::Blog::Post;
+unit class Section::Blog::Post is Site::Controller;
 
-method handle(:$request, :%mapping) {
+multi method handle(Get :$request, :%mapping) {
     my $id = %mapping<id>;
     my $session = $request.session;
     my $p = Section::Blog::Data::Post.load(:$id);

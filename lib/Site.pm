@@ -13,16 +13,18 @@ use Page::Login;
 use Section::SAML;
 use Section::Blog;
 
-has @!dispatch-list;
-has $!router;
+class Site::Main is Site::Router {
+    method routes {
+        $.route('',       Page::Redirect.new(:code(301), :url('/blog')));
+        $.route('login',  Page::Login);
+        $.route('blog/',  Section::Blog);
+        $.route('saml2/', Section::SAML);
+    }
+}
 
-submethod BUILD() {
-    $!router = Path::Router.new;
-    # we have no homepage; redirect to the blog
-    $!router.add-route('', target => Page::Redirect.new(:code(301), :url('/blog')));
-    $!router.add-route('login', target => Page::Login);
-    $!router.include-router('blog/' => Section::Blog.router);
-    $!router.include-router('saml2/' => Section::SAML.router);
+has $!router;
+submethod BUILD {
+    $!router = Site::Main.new;
 }
 
 method handle(%env) {
@@ -42,7 +44,7 @@ method handle(%env) {
     else {
         my $uri = $request.request-uri.subst(/\?.+$/, '');
 
-        my $page = $!router.match($uri);
+        my $page = $!router.router.match($uri);
         my $resp;
         if $page {
              $resp = $page.target.handle(:$request, :mapping($page.mapping));
@@ -54,7 +56,7 @@ method handle(%env) {
     }
 
     CATCH {
-        when X::Multi::NoMatch|X::TypeCheck::Binding|X::BadRequest {
+        when X::BadRequest {
             # assume that the URI is valid, but the method (or similar) was not
             return [ 400, [], []];
         }

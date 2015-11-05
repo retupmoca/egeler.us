@@ -1,15 +1,13 @@
-use Path::Router;
+use Site::Tools;
 
-unit class Section::SAML;
+unit class Section::SAML is Site::Router;
 
 use Section::SAML::Meta;
 use Section::SAML::Auth;
 use Section::SAML::AuthRespond;
 
-method router {
-    my $router = Path::Router.new;
-    $router.add-route('metadata', target => Section::SAML::Meta);
-    $router.add-route('auth', target => Section::SAML::Auth);
-    $router.add-route('authrespond', target => Section::SAML::AuthRespond);
-    return $router;
+method routes {
+    $.route('metadata',    Section::SAML::Meta);
+    $.route('auth',        Section::SAML::Auth);
+    $.route('authrespond', Section::SAML::AuthRespond);
 }
