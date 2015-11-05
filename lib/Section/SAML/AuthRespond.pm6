@@ -14,7 +14,7 @@ method handle(Get :$request) is authed {
 
     my $authn = $session.get('saml2-authn-request');
 
-    die X::BadRequest.new unless $authn && $sp-info{$auth.issuer};
+    die X::BadRequest.new unless $authn && $sp-info{$authn.issuer};
 
     $session.remove('saml2-authn-request');
 
