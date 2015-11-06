@@ -1,10 +1,10 @@
-use Site::Tools;
+use Web::RF;
 use Site::Template;
 use Page::Redirect;
 
 use Auth::PAM::Simple;
 
-unit class Page::Login is Site::Controller;
+unit class Page::Login is Web::RF::Controller;
 
 method display_login($return) {
     return [ 200, [ 'Content-Type' => 'text/html' ],

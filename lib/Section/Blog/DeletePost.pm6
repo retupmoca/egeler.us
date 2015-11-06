@@ -1,8 +1,9 @@
+use Web::RF;
 use Site::Tools;
 use Section::Blog::Data::Post;
 use Page::Redirect;
 
-unit class Section::Blog::DeletePost is Site::Controller::Authed;
+unit class Section::Blog::DeletePost is Web::RF::Controller::Authed;
 
 multi method handle(:$request, :%mapping) {
     my $id = %mapping<id>;

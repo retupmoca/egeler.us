@@ -1,6 +1,6 @@
-use Site::Tools;
+use Web::RF;
 
-unit class Section::SAML is Site::Router;
+unit class Section::SAML is Web::RF::Router;
 
 use Section::SAML::Meta;
 use Section::SAML::Auth;

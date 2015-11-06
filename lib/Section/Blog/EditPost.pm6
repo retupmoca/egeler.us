@@ -1,9 +1,10 @@
+use Web::RF;
 use Site::Tools;
 use Section::Blog::Data::Post;
 use Page::Redirect;
 use Site::Template;
 
-unit class Section::Blog::EditPost is Site::Controller::Authed;
+unit class Section::Blog::EditPost is Web::RF::Controller::Authed;
 
 multi method handle(Get :$request, :%mapping) {
     my %data;

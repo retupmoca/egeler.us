@@ -1,7 +1,7 @@
-use Site::Tools;
+use Web::RF;
 use Site::Template;
 
-unit class Page::NotFound is Site::Controller;
+unit class Page::NotFound is Web::RF::Controller;
 
 method handle {
     my $tmpl = Site::Template.new(:file('404.html'));

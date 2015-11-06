@@ -1,6 +1,6 @@
-use Site::Tools;
+use Web::RF;
 
-unit class Section::Blog is Site::Router;
+unit class Section::Blog is Web::RF::Router;
 
 use Section::Blog::Home;
 use Section::Blog::AddPost;

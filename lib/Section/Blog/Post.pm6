@@ -1,8 +1,8 @@
-use Site::Tools;
+use Web::RF;
 use Section::Blog::Data::Post;
 use Site::Template;
 
-unit class Section::Blog::Post is Site::Controller;
+unit class Section::Blog::Post is Web::RF::Controller;
 
 multi method handle(Get :$request, :%mapping) {
     my $id = %mapping<id>;

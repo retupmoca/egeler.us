@@ -1,11 +1,11 @@
 use MIME::Base64;
-use Site::Tools;
+use Web::RF;
 use Auth::SAML2::AuthnRequest;
 use Config;
 use XML;
 use Page::Redirect;
 
-unit class Section::SAML::Auth is Site::Controller;
+unit class Section::SAML::Auth is Web::RF::Controller;
 
 method handle(Post :$request) { 
     my $redirect;

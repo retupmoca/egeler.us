@@ -1,9 +1,10 @@
+use Web::RF;
 use Site::Tools;
 use Section::Blog::Data::Post;
 use Page::Redirect;
 use Site::Template;
 
-unit class Section::Blog::AddPost is Site::Controller::Authed;
+unit class Section::Blog::AddPost is Web::RF::Controller::Authed;
 
 multi method handle(Get :$request) {
     return [200, [ 'Content-Type' => 'text/html' ],

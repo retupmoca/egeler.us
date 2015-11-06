@@ -3,13 +3,14 @@ use Crust::Middleware::StackTrace;
 use Crust::Middleware::Session;
 use Crust::Middleware::Syslog;
 
+use Web::RF;
 use Site;
 use Config;
 
 Config.load("/etc/perlsite.conf");
 my $site = Site.new;
 
-my $app = sub (%env) { $site.handle(%env) }
+my $app = Web::RF.new(:root($site));
 
 my $store = Crust::Middleware::Session::Store::Memory.new();
 builder {

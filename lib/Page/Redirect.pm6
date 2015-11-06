@@ -1,6 +1,6 @@
-use Site::Tools;
+use Web::RF;
 
-unit class Page::Redirect is Site::Controller;
+unit class Page::Redirect is Web::RF::Controller;
 
 has $.code;
 has $.url;

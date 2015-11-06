@@ -1,8 +1,8 @@
-use Site::Tools;
+use Web::RF;
 use Auth::SAML2::EntityDescriptor;
 use Config;
 
-unit class Section::SAML::Meta is Site::Controller;
+unit class Section::SAML::Meta is Web::RF::Controller;
 
 method handle { 
     my $x509-pem = Config.get('saml-local-idp')<cert>;
