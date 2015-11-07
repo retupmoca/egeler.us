@@ -4,7 +4,6 @@ use Web::RF;
 use Auth::SAML2::AuthnRequest;
 use Config;
 use XML;
-use Page::Redirect;
 
 unit class Section::SAML::Auth is Web::RF::Controller;
 
@@ -30,5 +29,5 @@ method handle(Post :$request) {
         $redirect = '/login?return=/saml2/authrespond';
     }
 
-    return Page::Redirect.go(:code(302), :url($redirect));
+    return Web::RF::Redirect.go(:code(302), :url($redirect));
 }

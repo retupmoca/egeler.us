@@ -1,7 +1,6 @@
 use Web::RF;
 use Site::Tools;
 use Section::Blog::Data::Post;
-use Page::Redirect;
 use Site::Template;
 
 unit class Section::Blog::EditPost is Web::RF::Controller::Authed;
@@ -40,5 +39,5 @@ multi method handle(Post :$request, :%mapping) {
 
     $p.save;
 
-    return Page::Redirect.go(:code(302), :url('/blog'));
+    return Web::RF::Redirect.go(:code(302), :url('/blog'));
 }

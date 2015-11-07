@@ -2,7 +2,6 @@ use Web::RF;
 use Site::Tools;
 use Config;
 use Auth::SAML2::Assertion;
-use Page::Redirect;
 
 unit class Section::SAML::AuthRespond is Web::RF::Controller::Authed;
 

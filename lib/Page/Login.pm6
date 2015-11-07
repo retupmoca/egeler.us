@@ -1,6 +1,5 @@
 use Web::RF;
 use Site::Template;
-use Page::Redirect;
 
 use Auth::PAM::Simple;
 
@@ -24,7 +23,7 @@ multi method handle(Post :$request!) {
     if authenticate('login', $params<user>, $params<password>) {
         $request.session.set('local-login', $params<user>);
         my $return = $params<return>;
-        return Page::Redirect.go(:code(302), :url($return || '/'));
+        return Web::RF::Redirect.go(:code(302), :url($return || '/'));
     }
     return self.display_login($params<return>);
 }
