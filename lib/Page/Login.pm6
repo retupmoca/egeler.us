@@ -21,7 +21,7 @@ multi method handle(Post :$request!) {
     my $params = $request.parameters;
 
     if authenticate('login', $params<user>, $params<password>) {
-        $request.session.set('local-login', $params<user>);
+        $request.set-user-id($params<user>);
         my $return = $params<return>;
         return Web::RF::Redirect.go(:code(302), :url($return || '/'));
     }

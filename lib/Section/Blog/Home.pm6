@@ -9,7 +9,6 @@ method handle(:$request, :%mapping) {
     my %param;
     my $feed;
     my $user = %mapping<user>;
-    my $session = $request.session;
     my @rss-items;
 
     my $params = $request.parameters;
@@ -32,8 +31,8 @@ method handle(:$request, :%mapping) {
         }
         my %d;
 
-        if $session.data<local-login>
-           && $p.author eq $session.data<local-login> {
+        if $request.user-id
+           && $p.author eq $request.user-id {
             %d<own-post> = 1;
         }
 
@@ -57,7 +56,7 @@ method handle(:$request, :%mapping) {
                                       :description(''), :items(@rss-items));
     }
     %param<posts> = @tposts;
-    %param<login> = $session.data<local-login>;
+    %param<login> = $request.user-id;
 
     %param<page> = $page;
     %param<next-page> = '?page=' ~ ($page + 1) if @posts == $perpage;

@@ -1,5 +1,4 @@
 use Web::RF;
-use Site::Tools;
 use Config;
 use Auth::SAML2::Assertion;
 
@@ -18,13 +17,13 @@ multi method handle(Get :$request) {
     $session.remove('saml2-authn-request');
 
     my %attributes;
-    %attributes<email> = [ $session.data<local-login> ~ '@egeler.us' ];
+    %attributes<email> = [ $request.user-id ~ '@egeler.us' ];
     %attributes<lname> = [ 'Egeler' ];
-    %attributes<fname> = [ $session.data<local-login>.tc ];
+    %attributes<fname> = [ $request.user-id.tc ];
 
     my $assertion = Auth::SAML2::Assertion.new(
         :issuer('https://egeler.us/saml2/metadata'),
-        :subject(NameID => $session.data<local-login> ~ '@egeler.us'),
+        :subject(NameID => $request.user-id ~ '@egeler.us'),
         :%attributes#,
         #:signed,
         #:signature-cert($x509-pem),

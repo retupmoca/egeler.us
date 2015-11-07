@@ -6,11 +6,10 @@ unit class Section::Blog::Post is Web::RF::Controller;
 
 multi method handle(Get :$request, :%mapping) {
     my $id = %mapping<id>;
-    my $session = $request.session;
     my $p = Section::Blog::Data::Post.load(:$id);
     my %d;
 
-    if $session.data<local-login> && $p.author eq $session.data<local-login> {
+    if $request.user-id && $p.author eq $request.user-id {
         %d<own-post> = 1;
     }
 

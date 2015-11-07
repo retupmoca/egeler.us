@@ -1,5 +1,4 @@
 use Web::RF;
-use Site::Tools;
 use Section::Blog::Data::Post;
 use Site::Template;
 
@@ -17,7 +16,7 @@ multi method handle(Get :$request, :%mapping) {
     %data<body> = $p.body;
     %data<tags> = $p.tags.join(',');
 
-    die "Not authorized" unless $p.author eq $request.session.data<local-login>;
+    die "Not authorized" unless $p.author eq $request.user-id;
 
     return [200, [ 'Content-Type' => 'text/html' ],
             [ Site::Template.new(:file('add-blog-post.tmpl')).render(%data) ]];
@@ -28,7 +27,7 @@ multi method handle(Post :$request, :%mapping) {
     my $id = %mapping<id>;
     my $p = Section::Blog::Data::Post.load(:$id);
 
-    die "Not authorized" unless $p.author eq $request.session.data<local-login>;
+    die "Not authorized" unless $p.author eq $request.user-id;
 
     $p.title = $params<title>;
     $p.body = $params<body>;

@@ -1,5 +1,4 @@
 use MIME::Base64;
-use Site::Tools;
 use Web::RF;
 use Auth::SAML2::AuthnRequest;
 use Config;

@@ -1,5 +1,4 @@
 use Web::RF;
-use Site::Tools;
 use Config;
 
 use Page::NotFound;
@@ -34,7 +33,9 @@ class Site is Web::RF::Router {
                 return [ 400, [], [] ];
             }
             when X::PermissionDenied {
-                return [ 403, [], [] ];
+                if $request ~~ Anon & Get {
+                    return Web::RF::Redirect.go(302, '/login?return='~$request.request-uri);
+                }
             }
             default {
                 return [ 500, [ "Content-Type" => 'text/plain' ], [ $_.gist ] ];

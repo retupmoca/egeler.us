@@ -1,5 +1,4 @@
 use Web::RF;
-use Site::Tools;
 use Section::Blog::Data::Post;
 use Site::Template;
 
@@ -16,7 +15,7 @@ multi method handle(Post :$request) {
     @tags = @tags.grep({$_});
     my $p = Section::Blog::Data::Post.new(:title($params<title>),
                                           :body($params<body>),
-                                          :author($request.session.data<local-login>),
+                                          :author($request.user-id),
                                           :tags(@tags));
 
     $p.save;
