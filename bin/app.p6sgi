@@ -8,10 +8,8 @@ use Site;
 use Config;
 
 Config.load("/etc/perlsite.conf");
-my $site = Site.new;
-my $webrf = Web::RF.new(:root($site));
 
-my $app = sub (%env) { $webrf.handle(%env) };
+my $app = Web::RF.app(:root(Site.new));
 
 my $store = Crust::Middleware::Session::Store::Memory.new();
 builder {
