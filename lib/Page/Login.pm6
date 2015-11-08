@@ -12,13 +12,12 @@ method display_login($return) {
 }
 
 multi method handle(Get :$request!, :$return) {
-    my $params = $request.parameters;
-
     return self.display_login($return || '');
 }
 
-multi method handle(Post :$request!, :$return) {
+multi method handle(Post :$request!) {
     my $params = $request.parameters;
+    my $return = $params<return>;
 
     if authenticate('login', $params<user>, $params<password>) {
         $request.set-user-id($params<user>);
