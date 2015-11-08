@@ -6,8 +6,8 @@
                 <TMPL_IF NAME="tags"><div class="post-tags">Tagged
                                      <TMPL_VAR NAME="tags"></div></TMPL_IF>
                 <TMPL_IF NAME="own-post"><div class="manage-tags">
-                    <a href="/blog/p/<TMPL_VAR NAME="id">/edit" rel="nofollow">edit</a>
-                    <a onclick="if(!config('are you sure?')){ return 0; }" href="/blog/p/<TMPL_VAR NAME="id">/delete" rel="nofollow">delete</a>
+                    <a href="<TMPL_VAR NAME="edit-post-link">" rel="nofollow">edit</a>
+                    <a onclick="if(!config('are you sure?')){ return 0; }" href="<TMPL_VAR NAME="delete-post-link">" rel="nofollow">delete</a>
                 </div></TMPL_IF>
                 <div class="post-body"><TMPL_VAR NAME="body"></div>
             </div>

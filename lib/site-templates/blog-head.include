@@ -93,10 +93,10 @@
             Ramblings of the Egeler Family
             <div class="account-links">
                 <TMPL_IF NAME="login">
-                    <a href="/blog/add-post">Add Post</a> |
+                    <a href="<TMPL_VAR NAME="add-post-link">">Add Post</a> |
                     <TMPL_VAR NAME="login">
                 <TMPL_ELSE>
-                    <a href="/login?return=/blog">Login</a>
+                    <a href="<TMPL_VAR NAME="login-link">">Login</a>
                 </TMPL_IF>
             </div>
         </div>

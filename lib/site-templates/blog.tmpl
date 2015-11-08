@@ -1,7 +1,7 @@
 <TMPL_INCLUDE NAME="blog-head.include">
             <TMPL_LOOP NAME="posts">
                 <div class="post">
-                    <div class="post-title"><a href="/blog/p/<TMPL_VAR NAME="id">"><TMPL_VAR NAME="title"></a></div>
+                    <div class="post-title"><a href="<TMPL_VAR NAME="link">"><TMPL_VAR NAME="title"></a></div>
                     <div class="post-author">By <TMPL_VAR NAME="author"></div>
                     <div class="post-stamp">On <TMPL_VAR NAME="posted"></div>
                     <TMPL_IF NAME="tags"><div class="post-tags">Tagged
@@ -9,8 +9,8 @@
                                             <a href="?tag=<TMPL_VAR NAME="tag">"><TMPL_VAR NAME="tag"></a><TMPL_IF NAME="comma">,</TMPL_IF>
                                          </TMPL_LOOP></div></TMPL_IF>
                     <TMPL_IF NAME="own-post"><div class="manage-tags">
-                        <a href="/blog/p/<TMPL_VAR NAME="id">/edit" rel="nofollow">edit</a>
-                        <a onclick="if(!config('are you sure?')){ return 0; }" href="/blog/p/<TMPL_VAR NAME="id">/delete" rel="nofollow">delete</a>
+                        <a href="<TMPL_VAR NAME="edit-post-link">" rel="nofollow">edit</a>
+                        <a onclick="if(!config('are you sure?')){ return 0; }" href="<TMPL_VAR NAME="delete-post-link">" rel="nofollow">delete</a>
                     </div></TMPL_IF>
                     <div class="post-body"><TMPL_VAR NAME="body"></div>
                 </div>
