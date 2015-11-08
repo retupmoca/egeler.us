@@ -10,7 +10,8 @@ use Section::Blog;
 class Site is Web::RF::Router {
     method routes {
         $.route('',       Web::RF::Redirect.new(:code(301), :url('/blog')));
-        $.route('login',  Page::Login, :query('return'));
+        $.route('login',  Page::Login,
+                :query('return'));
         $.route('blog/',  Section::Blog);
         $.route('saml2/', Section::SAML);
     }
@@ -34,7 +35,7 @@ class Site is Web::RF::Router {
             }
             when X::PermissionDenied {
                 if $request ~~ Anon & Get {
-                    my $url = $.url-for(Page::Return, :return($request.request-uri));
+                    my $url = $.url-for(Page::Login, :return($request.request-uri));
                     return Web::RF::Redirect.go(302, $url);
                 }
             }
