@@ -21,5 +21,5 @@ multi method handle(Post :$request) {
 
     $p.save;
 
-    return Web::RF::Redirect.go(:code(302), :url($.url-for(Section::Blog::Home));
+    return Web::RF::Redirect.go(:code(302), :url($.url-for(Section::Blog::Home)));
 }
