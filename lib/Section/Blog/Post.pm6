@@ -4,7 +4,7 @@ use Site::Template;
 
 unit class Section::Blog::Post is Web::RF::Controller;
 
-multi method handle(Get :$request, :$id! {
+multi method handle(Get :$request, :$id!) {
     my $p = Section::Blog::Data::Post.load(:$id);
     my %d;
 
