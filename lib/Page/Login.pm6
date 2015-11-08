@@ -22,7 +22,6 @@ multi method handle(Post :$request!, :$return) {
 
     if authenticate('login', $params<user>, $params<password>) {
         $request.set-user-id($params<user>);
-        my $return = $return;
         return Web::RF::Redirect.go(:code(302), :url($return || '/'));
     }
     return self.display_login($return);
