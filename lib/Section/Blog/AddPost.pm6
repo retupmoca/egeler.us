@@ -6,8 +6,14 @@ use Site::Template;
 unit class Section::Blog::AddPost is Web::RF::Controller::Authed;
 
 multi method handle(Get :$request) {
+    my %data;
+    %data<id> = '';
+    %data<title> = '';
+    %data<body> = '';
+    %data<tags> = '';
+
     return [200, [ 'Content-Type' => 'text/html' ],
-            [ Site::Template.new(:file('add-blog-post.tmpl')).render() ]];
+            [ Site::Template.new(:file('add-blog-post.tmpl')).render(%data) ]];
 }
 multi method handle(Post :$request) {
     my $params = $request.parameters;
@@ -21,5 +27,6 @@ multi method handle(Post :$request) {
 
     $p.save;
 
-    return Web::RF::Redirect.go(:code(302), :url($.url-for(Section::Blog::Home)));
+    my $url = $.url-for(Section::Blog::Post, :id($p.id));
+    return Web::RF::Redirect.go(:code(302), :$url);
 }
