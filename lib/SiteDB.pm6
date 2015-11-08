@@ -28,7 +28,7 @@ sub db-update($dbh, $dbname) {
     my @files = $dir.IO.dir;
 
     # get an index of revisions available
-    my $latest;
+    my $latest = 0;
     my %revs;
     for @files -> $f {
         my @name = $f.basename.split(/\./);
