@@ -17,10 +17,10 @@ class Site is Web::RF::Router {
     }
 
     method before(:$request) {
-        if $request.env<HTTP_HOST> eq 'retupmoca.com' {
+        if $request.host eq 'retupmoca.com' {
             return Web::RF::Redirect.go(:code(301), :url('https://egeler.us/blog/u/andrew'));
         }
-        elsif $request.env<HTTP_HOST> ne 'egeler.us' || !$request.secure {
+        elsif $request.host ne 'egeler.us' || !$request.secure {
             return Web::RF::Redirect.go(:code(301), :url('https://egeler.us/'));
         }
     }
