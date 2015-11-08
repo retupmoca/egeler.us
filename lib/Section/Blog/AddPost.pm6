@@ -1,5 +1,5 @@
 use Web::RF;
-use Section::Blog::Home;
+use Section::Blog::Post;
 use Section::Blog::Data::Post;
 use Site::Template;
 
