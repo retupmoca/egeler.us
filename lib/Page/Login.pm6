@@ -11,19 +11,19 @@ method display_login($return) {
                             .render(return => $return) ]];
 }
 
-multi method handle(Get :$request!) {
+multi method handle(Get :$request!, :$return) {
     my $params = $request.parameters;
 
-    return self.display_login($params<return>);
+    return self.display_login($return || '');
 }
 
-multi method handle(Post :$request!) {
+multi method handle(Post :$request!, :$return) {
     my $params = $request.parameters;
 
     if authenticate('login', $params<user>, $params<password>) {
         $request.set-user-id($params<user>);
-        my $return = $params<return>;
+        my $return = $return;
         return Web::RF::Redirect.go(:code(302), :url($return || '/'));
     }
-    return self.display_login($params<return>);
+    return self.display_login($return);
 }

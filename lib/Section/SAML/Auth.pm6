@@ -28,7 +28,7 @@ method handle(Post :$request) {
         $redirect = $authrespond;
     }
     else {
-        $redirect = $.url-for(Page::Login) ~ '?return=' ~ $authrespond;
+        $redirect = $.url-for(Page::Login, :return($authrespond));
     }
 
     return Web::RF::Redirect.go(:code(302), :url($redirect));
