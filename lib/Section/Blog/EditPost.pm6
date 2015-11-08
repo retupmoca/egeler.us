@@ -1,5 +1,4 @@
 use Web::RF;
-use Section::Blog::Home;
 use Section::Blog::Data::Post;
 use Site::Template;
 
@@ -37,6 +36,6 @@ multi method handle(Post :$request, :$id!) {
 
     $p.save;
 
-    my $url = $.url-for(Section::Blog::Home);
+    my $url = $.url-for('Section::Blog::Home');
     return Web::RF::Redirect.go(:code(302), :$url);
 }

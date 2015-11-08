@@ -1,9 +1,4 @@
 use Web::RF;
-use Section::Blog::AddPost;
-use Section::Blog::EditPost;
-use Section::Blog::DeletePost;
-use Section::Blog::Post;
-use Page::Login;
 use Section::Blog::Data::Post;
 use Syndication;
 use Site::Template;
@@ -48,9 +43,9 @@ method handle(:$request, :$user) {
         %d<tags_list>[*-1]<comma> = 0 if $p.tags;
         %d<author> = $p.author;
         %d<posted> = $p.posted.Str.subst(/Z$/, '').subst(/T/, ' ');
-        %d<link> = $.url-for(Section::Blog::Post, :id($p.id));
-        %d<edit-post-link> = $.url-for(Section::Blog::EditPost, :id($p.id));
-        %d<delete-post-link> = $.url-for(Section::Blog::DeletePost, :id($p.id));
+        %d<link> =             $.url-for('Section::Blog::Post', :id($p.id));
+        %d<edit-post-link> =   $.url-for('Section::Blog::EditPost', :id($p.id));
+        %d<delete-post-link> = $.url-for('Section::Blog::DeletePost', :id($p.id));
 
         @tposts.push(%d);
     }
@@ -64,8 +59,8 @@ method handle(:$request, :$user) {
     }
     %param<posts> = @tposts;
     %param<login> = $request.user-id;
-    %param<add-post-link> = $.url-for(Section::Blog::AddPost);
-    %param<login-link> = $.url-for(Page::Login, :return($.url-for(Section::Blog::Home)));
+    %param<add-post-link> = $.url-for('Section::Blog::AddPost');
+    %param<login-link> =    $.url-for('Page::Login', :return($.url-for(Section::Blog::Home)));
 
     %param<page> = $page;
     %param<next-page> = '?page=' ~ ($page + 1) if @posts == $perpage;
