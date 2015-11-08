@@ -1,4 +1,6 @@
 use MIME::Base64;
+use Section::SAML::AuthRespond;
+use Page::Login;
 use Web::RF;
 use Auth::SAML2::AuthnRequest;
 use Config;
@@ -21,11 +23,12 @@ method handle(Post :$request) {
 
     $request.session.set('saml2-authn-request', $authn);
 
+    my $authrespond = $.url-for(Section::SAML::AuthRespond);
     if $request ~~ Authed {
-        $redirect = '/saml2/authrespond';
+        $redirect = $authrespond;
     }
     else {
-        $redirect = '/login?return=/saml2/authrespond';
+        $redirect = $.url-for(Page::Login) ~ '?return=' ~ $authrespond;
     }
 
     return Web::RF::Redirect.go(:code(302), :url($redirect));

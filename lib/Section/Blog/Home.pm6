@@ -5,10 +5,9 @@ use Site::Template;
 
 unit class Section::Blog::Home is Web::RF::Controller;
 
-method handle(:$request, :%mapping) {
+method handle(:$request, :$user) {
     my %param;
     my $feed;
-    my $user = %mapping<user>;
     my @rss-items;
 
     my $params = $request.parameters;

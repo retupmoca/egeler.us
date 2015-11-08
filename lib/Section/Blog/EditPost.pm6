@@ -1,14 +1,14 @@
 use Web::RF;
+use Section::Blog::Home;
 use Section::Blog::Data::Post;
 use Site::Template;
 
 unit class Section::Blog::EditPost is Web::RF::Controller::Authed;
 
-multi method handle(Get :$request, :%mapping) {
+multi method handle(Get :$request, :$id!) {
     my %data;
 
     %data<edit> = 1;
-    my $id = %mapping<id>;
     my $p = Section::Blog::Data::Post.load(:$id);
 
     %data<id> = $p.id;
@@ -22,9 +22,8 @@ multi method handle(Get :$request, :%mapping) {
             [ Site::Template.new(:file('add-blog-post.tmpl')).render(%data) ]];
 }
 
-multi method handle(Post :$request, :%mapping) {
+multi method handle(Post :$request, :$id!) {
     my $params = $request.parameters;
-    my $id = %mapping<id>;
     my $p = Section::Blog::Data::Post.load(:$id);
 
     die "Not authorized" unless $p.author eq $request.user-id;
@@ -38,5 +37,6 @@ multi method handle(Post :$request, :%mapping) {
 
     $p.save;
 
-    return Web::RF::Redirect.go(:code(302), :url('/blog'));
+    my $url = $.url-for(Section::Blog::Home);
+    return Web::RF::Redirect.go(:code(302), :$url);
 }
